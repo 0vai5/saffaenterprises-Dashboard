@@ -1,7 +1,7 @@
 
 import DashboardCards from "@/components/DashboardCards";
 import DashboardTable from "@/components/DashboardTable";
-import WelcomeText from "@/components/welcomeText";
+import WelcomeText from "@/components/WelcomeText";
 
 
 const page = () => {
