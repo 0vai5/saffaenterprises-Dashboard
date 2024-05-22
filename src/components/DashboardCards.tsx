@@ -36,7 +36,7 @@ const DashboardCards = () => {
           </Link>
         </CardFooter>
       </Card>
-      <Card className="" x-chunk="dashboard-05-chunk-1">
+      <Card className="w-full md:w-auto" x-chunk="dashboard-05-chunk-1">
         <CardHeader className="pb-2">
           <CardDescription>Upcoming Payments</CardDescription>
           <CardTitle className="text-4xl">$250</CardTitle>
