@@ -1,10 +1,16 @@
-import Header from '@/components/Header'
-import React from 'react'
+
+import DashboardCards from "@/components/DashboardCards";
+import DashboardTable from "@/components/DashboardTable";
+
 
 const page = () => {
   return (
-    <Header />
-  )
-}
+    <section className="max-container">
+      <DashboardCards />
+      <DashboardTable />
+      
+    </section>
+  );
+};
 
-export default page
+export default page;
