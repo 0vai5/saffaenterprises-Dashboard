@@ -116,7 +116,7 @@ const page = () => {
 
       <div className='flex justify-between items-center'>
       <Button>Add Item</Button>
-      <Button>Create Invoice</Button>
+      <Button>Update Invoice</Button>
       </div>
     </section>
   )
