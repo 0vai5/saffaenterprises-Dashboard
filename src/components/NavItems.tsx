@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
+import { LogOut } from "lucide-react";
 
 const NavItems = () => {
   const router = useRouter();
@@ -10,23 +12,33 @@ const NavItems = () => {
     <ul className="flex flex-col md:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
       <li>
         <Link href="/">
-            <h4 className="text-xl font-semibold">Dashboard</h4>
+          <h4 className="text-xl font-semibold">Dashboard</h4>
         </Link>
       </li>
       <li>
         <Link href="/invoice">
-            <h4 className="text-xl font-semibold">Invoice</h4>
+          <h4 className="text-xl font-semibold">Invoice</h4>
         </Link>
       </li>
       <li>
         <Link href="/search">
-            <h4 className="text-xl font-semibold">Invoice Search</h4>
+          <h4 className="text-xl font-semibold">Invoice Search</h4>
         </Link>
       </li>
       <li>
         <Link href="/users">
-            <h4 className="text-xl font-semibold">Users</h4>
+          <h4 className="text-xl font-semibold">Users</h4>
         </Link>
+      </li>
+      <li>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-7 gap-1 text-sm"
+        >
+          <LogOut className="h-3.5 w-3.5" />
+          <span className="not-sr-only">LogOut</span>
+        </Button>
       </li>
     </ul>
   );

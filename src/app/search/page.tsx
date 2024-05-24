@@ -72,7 +72,7 @@ const Search = () => {
                         className="h-7 gap-1 text-sm"
                       >
                         <ListFilter className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only">Filter</span>
+                        <span className="not-sr-only">Filter</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -95,7 +95,7 @@ const Search = () => {
                     className="h-7 gap-1 text-sm"
                   >
                     <File className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Export</span>
+                    <span className="not-sr-only">Export</span>
                   </Button>
                 </div>
         </CardHeader>
@@ -131,7 +131,7 @@ const Search = () => {
                         className="h-7 gap-1 text-sm"
                       >
                         <EllipsisVerticalIcon className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only">More</span>
+                        <span className="not-sr-only">More</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -144,7 +144,7 @@ const Search = () => {
                           className="h-7 gap-1 text-sm"
                         >
                           <Trash className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only">Delete</span>
+                          <span className="not-sr-only">Delete</span>
                         </Button>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
@@ -154,7 +154,7 @@ const Search = () => {
                           className="h-7 gap-1 text-sm"
                         >
                           <Pencil className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only">Edit</span>
+                          <span className="not-sr-only">Edit</span>
                         </Button>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
@@ -164,7 +164,7 @@ const Search = () => {
                           className="h-7 gap-1 text-sm"
                         >
                           <ArrowDownToLine className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only">Download</span>
+                          <span className="not-sr-only">Download</span>
                         </Button>
                       </DropdownMenuItem>
                     </DropdownMenuContent>

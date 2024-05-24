@@ -18,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="shortcut icon" href="/saffaenterprises.png" type="image/x-icon" />
+      </head>
       <Analytics/>
       <body className={inter.className}>
       <Header />

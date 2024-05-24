@@ -10,7 +10,6 @@ const page = () => {
       <WelcomeText />
       <DashboardCards />
       <DashboardTable />
-      
     </section>
   );
 };
