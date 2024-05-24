@@ -19,14 +19,14 @@ import { Button } from '@/components/ui/button'
 const page = () => {
   return (
     <section className='max-container'>
-      <h1 className='subhead-text mb-10'>Clients's Information</h1>
+      <h1 className='subhead-text mb-10'>Clients Information</h1>
       <div className='flex flex-col md:flex-row justify-between items-center gap-3 mb-5'>
         <div className='flex justify-start flex-col items-start'>
-          <label>Client's No:</label>
+          <label>Clients No:</label>
           <input type="number" id="phNum" placeholder='Enter Phone Number' className='border rounded-lg border-slate-400 px-3 py-1' />
         </div>
         <div className='flex justify-start flex-col items-start'>
-          <label>Client's Email:</label>
+          <label>Clients Email:</label>
           <input type="email" id="email" placeholder='Enter email' className=' border-slate-400 border rounded-lg px-3 py-1' />
         </div>
         <div className='flex justify-start flex-col items-start'>
