@@ -140,7 +140,7 @@ const Search = () => {
                       <DropdownMenuItem>
                         <Button
                           size="sm"
-                          variant="outline"
+                          variant="destructive"
                           className="h-7 gap-1 text-sm"
                         >
                           <Trash className="h-3.5 w-3.5" />
@@ -150,7 +150,7 @@ const Search = () => {
                       <DropdownMenuItem>
                         <Button
                           size="sm"
-                          variant="outline"
+                          variant="secondary"
                           className="h-7 gap-1 text-sm"
                         >
                           <Pencil className="h-3.5 w-3.5" />

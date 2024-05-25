@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Trash } from 'lucide-react';
 
 type Inputs = {
   ClientNo: number;
@@ -15,19 +16,25 @@ type Inputs = {
   OrganizationName: string;
   OrganizationTel: number;
   OrganizationAddress: string;
-  InvoiceDate: Date;
+  InvoiceDate: string;
   DCNo: number;
-  DCDate: Date;
+  DCDate: string;
 }
 
 type Products = {
-  product: string
-  quantity: number
-  UnitPrice: number
-  TotalAmount: number
+  product: string;
+  quantity: number;
+  UnitPrice: number;
+  TotalAmount: number;
 }
 
 const Page = () => {
+  const [products, setProducts] = useState<Products[]>([]);
+
+  const handleRowAddition = () => {
+    setProducts([...products, { product: '', quantity: 1, UnitPrice: 0, TotalAmount: 0 }]);
+  }
+
   const {
     register,
     handleSubmit,
@@ -35,11 +42,27 @@ const Page = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log("Form data:", data);
+    const invoice = { data, products };
+    console.log(invoice);
   };
 
+  const handleInputChange = (index: number, field: string, value: string | number) => {
+    setProducts((prevProducts) => {
+      const updatedProducts = [...prevProducts];
+      const product = { ...updatedProducts[index], [field]: value };
+      product.TotalAmount = product.quantity * product.UnitPrice;
+      updatedProducts[index] = product;
+      return updatedProducts;
+    });
+  }
 
+  const calculateGrandTotal = () => {
+    return products.reduce((total, product) => total + product.TotalAmount, 0);
+  }
 
+  const handleDeletion = (index: number) => {
+    setProducts(products.filter((_, i) => i !== index));
+  }
 
   return (
     <section className='max-container'>
@@ -160,7 +183,7 @@ const Page = () => {
           <CardContent className='mb-5'>
             <Card x-chunk="dashboard-05-chunk-3">
               <CardContent>
-                <div className="table-responsive"> {/* Add this div for responsiveness */}
+                <div className="table-responsive">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -168,28 +191,49 @@ const Page = () => {
                         <TableHead className="table-cell">Quantity</TableHead>
                         <TableHead className="table-cell">Unit Price</TableHead>
                         <TableHead className="text-right">Amount</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow className="bg-accent">
+                      {products.map((product, index) => (
+                        <TableRow key={index} className="bg-accent">
                           <TableCell>
                             <Input
                               type="text"
+                              value={product.product}
+                              onChange={(e) => handleInputChange(index, 'product', e.target.value)}
                             />
                           </TableCell>
                           <TableCell className="table-cell">
                             <Input
                               type="number"
+                              value={product.quantity}
+                              onChange={(e) => handleInputChange(index, 'quantity', Number(e.target.value))}
                             />
                           </TableCell>
                           <TableCell className="table-cell">
                             <Input
                               type="number"
+                              value={product.UnitPrice}
+                              onChange={(e) => handleInputChange(index, 'UnitPrice', Number(e.target.value))}
                             />
                           </TableCell>
                           <TableCell className="text-right">
+                            Rs. {product.TotalAmount.toFixed(2)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              className="h-7 gap-1 text-sm"
+                              onClick={() => handleDeletion(index)}
+                            >
+                              <Trash className="h-3.5 w-3.5" />
+                          <span className="not-sr-only">Delete</span>
+                        </Button>
                           </TableCell>
                         </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </div>
@@ -197,14 +241,14 @@ const Page = () => {
             </Card>
           </CardContent>
           <CardFooter className='flex justify-between items-center flex-col md:flex-row'>
-            <div><Button>Add Item</Button></div>
             <div>
-              Grand Total:
+              <Button onClick={handleRowAddition}>Add Item</Button>
+            </div>
+            <div>
+              Grand Total: Rs. {calculateGrandTotal().toFixed(2)}
             </div>
           </CardFooter>
         </Card>
-
-
 
         <Button variant={'secondary'} type="submit">Create Invoice</Button>
       </form>

@@ -190,3 +190,7 @@ body:has(.card[data-color="green"]:hover) {
   display: flex;
   flex-direction: row;
 }
+
+.error{
+  color: red;
+}
