@@ -1,264 +1,123 @@
-'use client'
-
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { useForm, SubmitHandler } from "react-hook-form";
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Trash } from 'lucide-react';
+import { Pencil, ArrowDownToLine, Printer } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
 
-type Inputs = {
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
-  OrganizationName: string;
-  OrganizationTel: number;
-  OrganizationAddress: string;
-  InvoiceDate: string;
-  DCNo: number;
-  DCDate: string;
-}
-
-type Products = {
-  product: string;
-  quantity: number;
-  UnitPrice: number;
-  TotalAmount: number;
-}
-
-const Page = () => {
-  const [products, setProducts] = useState<Products[]>([]);
-  // const [total, setTotal] = useState(0)
-
-  const handleRowAddition = () => {
-    setProducts([...products, { product: '', quantity: 1, UnitPrice: 0, TotalAmount: 0 }]);
-  }
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
-
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const grandTotal = calculateGrandTotal();
-    const invoice = { ...data, products, grandTotal };
-    console.log('Invoice:', invoice); // Should include form data, products, and grand total
-  };
-
-  const handleInputChange = (index: number, field: string, value: string | number) => {
-    setProducts((prevProducts) => {
-      const updatedProducts = [...prevProducts];
-      const product = { ...updatedProducts[index], [field]: value };
-      product.TotalAmount = product.quantity * product.UnitPrice;
-      updatedProducts[index] = product;
-      return updatedProducts;
-    });
-  }
-
-  const calculateGrandTotal = () => {
-    return products.reduce((total, product) => total + product.TotalAmount, 0);
-  }
-
-  const handleDeletion = (index: number) => {
-    setProducts(products.filter((_, i) => i !== index));
-  }
-
-  return (
-    <section className='max-container'>
-      <form className='flex flex-col justify-between gap-4' onSubmit={handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Client Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription className='mb-3'>
-              Important Information about the Client and its Organization
-            </CardDescription>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>Client Mobile #</Label>
-                <Input
-                  type='number'
-                  placeholder='Enter Client Mobile Number'
-                  {...register('ClientNo', { required: true })}
-                />
-                {errors.ClientNo && <p className="error">Client Mobile # is required</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  placeholder='Enter Client Email'
-                  {...register('ClientEmail', {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                      message: "Invalid email address"
-                    }
-                  })} />
-                {errors.ClientEmail && <p className="error">{errors.ClientEmail.message}</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>Client Name</Label>
-                <Input
-                  type='text'
-                  placeholder='Enter Client Name'
-                  {...register('ClientName', { required: true })}
-                />
-                {errors.ClientName && <p className="error">Client Name is required</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>Organization Name</Label>
-                <Input
-                  type='text'
-                  placeholder='Enter Organization Name'
-                  {...register('OrganizationName', { required: true })}
-                />
-                {errors.OrganizationName && <p className="error">Organization Name is required</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>Organization Tel#</Label>
-                <Input
-                  type='text'
-                  placeholder='Enter Organization Tel#'
-                  {...register('OrganizationTel', { required: true })}
-                />
-                {errors.OrganizationTel && <p className="error">Organization Tel# is required</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>Organization Address</Label>
-                <Input
-                  type='text'
-                  placeholder='Enter Organization Address'
-                  {...register('OrganizationAddress', { required: true })}
-                />
-                {errors.OrganizationAddress && <p className="error">Organization Address is required</p>}
-              </div>
+const page = () => {
+    return (
+        <section className='max-container'>
+            <div className="flex items-center justify-end mb-4 gap-3">
+                <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+                    <Printer className="h-3.5 w-3.5" />
+                    <span className="not-sr-only">Print</span>
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+                    <Pencil className="h-3.5 w-3.5" />
+                    <span className="not-sr-only">Edit</span>
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+                    <ArrowDownToLine className="h-3.5 w-3.5" />
+                    <span className="not-sr-only">Download</span>
+                </Button>
             </div>
-          </CardContent>
-        </Card>
+            <Card>
+                <CardHeader>
+                    <Image
+                        src={'/saffaenterprises.png'}
+                        alt='company logo'
+                        width={150}
+                        height={75}
+                    />
+                </CardHeader>
+                <CardContent className='mb-10 max-container'>
+                    <div className='flex justify-between item-center mb-10'>
+                        <div className="flex flex-col">
+                            <h1 className='text-base font-bold'>Billed To:</h1>
+                            <p>Comapny Name</p>
+                            <p>company Tel.</p>
+                            <p>Company Address</p>
+                        </div>
+                        <div className="flex flex-col">
+                            <h1 className='text-base font-bold'>PO. No. 12346</h1>
+                            <p>dd/mm/yyyy</p>
+                            <p>DC Date</p>
+                            <p>DC No.</p>
+                        </div>
+                    </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Invoice Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription className='mb-3'>
-              Important Information about the Invoice and Delivery
-            </CardDescription>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>DC No. #</Label>
-                <Input
-                  type='number'
-                  placeholder='Enter Delivery Number'
-                  {...register('DCNo', { required: true })}
-                />
-                {errors.DCNo && <p className="error">DC No. # is required</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>DC Date</Label>
-                <Input type='date'
-                  {...register('DCDate', { required: true })}
-                />
-                {errors.DCDate && <p className="error">DC Date is required</p>}
-              </div>
-              <div className='flex flex-col items-start justify-between'>
-                <Label className='mb-2'>Invoice Date</Label>
-                <Input type='date'
-                  {...register('InvoiceDate', { required: true })}
-                />
-                {errors.InvoiceDate && <p className="error">Invoice Date is required</p>}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                    {/* Product */}
 
-        <Card>
-          <CardHeader className="px-7">
-            <CardTitle>Products Information</CardTitle>
-            <CardDescription>Products Purchased by the Client</CardDescription>
-          </CardHeader>
-          <CardContent className='mb-5'>
-            <Card x-chunk="dashboard-05-chunk-3">
-              <CardContent>
-                <div className="overflow-auto">
-                  <Table className="min-w-full">
-                    <TableHeader>
-                      <TableRow className='grid grid-cols-5 items-center pt-5'>
-                        <TableHead className='hidden md:table-cell'>Product</TableHead>
-                        <TableHead className="hidden md:table-cell">Quantity</TableHead>
-                        <TableHead className="hidden md:table-cell">Unit Price</TableHead>
-                        <TableHead className="hidden md:table-cell">Amount</TableHead>
-                        <TableHead className="hidden md:table-cell">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {products.map((product, index) => (
-                        <TableRow key={index} className="bg-accent grid justify-between grid-cols-1 md:grid-cols-5 items-center">
-                          <TableCell>
-                            <Input
-                              type="text"
-                              placeholder='Product'
-                              value={product.product}
-                              onChange={(e) => handleInputChange(index, 'product', e.target.value)}
-                            />
-                          </TableCell>
-                          <TableCell className="table-cell">
-                            <Input
-                              type="number"
-                              placeholder='Quantity'
-                              value={product.quantity}
-                              onChange={(e) => handleInputChange(index, 'quantity', Number(e.target.value))}
-                            />
-                          </TableCell>
-                          <TableCell className="table-cell">
-                            <Input
-                              type="number"
-                              placeholder='Unit Price'
-                              value={product.UnitPrice}
-                              onChange={(e) => handleInputChange(index, 'UnitPrice', Number(e.target.value))}
-                            />
-                          </TableCell>
-                          <TableCell className="text-right">
-                            Rs. {product.TotalAmount.toFixed(2)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              className="h-7 gap-1 text-sm"
-                              onClick={() => handleDeletion(index)}
-                            >
-                              <Trash className="h-3.5 w-3.5" />
-                              <span className="not-sr-only">Delete</span>
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
+                    <Card x-chunk="dashboard-05-chunk-3">
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Product</TableHead>
+                                        <TableHead className="hidden sm:table-cell">
+                                            Quantity
+                                        </TableHead>
+                                        <TableHead className="hidden sm:table-cell">
+                                            Unit Price
+                                        </TableHead>
+                                        <TableHead className="text-right">Amount</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow className="bg-accent">
+                                        <TableCell>
+                                            <div className="font-medium">PT-100</div>
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            1000
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            100
+                                        </TableCell>
+                                        <TableCell className="text-right">$250.00</TableCell>
+                                    </TableRow>
+                                    <TableRow className="bg-accent">
+                                        <TableCell>
+                                            <div className="font-medium">PT-100</div>
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            1000
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            100
+                                        </TableCell>
+                                        <TableCell className="text-right">$250.00</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+
+                </CardContent>
+                <CardFooter className='flex justify-between items-end md:items-center px-10 md:flex-row flex-col-reverse gap-[3rem]'>
+                    <div className='flex justify-end items-end flex-col gap-4'>
+                        <Separator className='font-bold' />
+                        <p className='font-bold'>CEO SaffaEnterprises</p>
+                        <p className='font-semibold'>Waseem Haroon</p>
+                    </div>
+                    <div className='flex justify-end items-end flex-col gap-5'>
+                        <p className='align-center'><span className='font-bold'>Total: </span>Rs. 12000</p>
+                        <Separator />
+                        <p><span className='font-bold'>Grand Total: </span>Rs. 12000</p>
+                    </div>
+                </CardFooter>
             </Card>
-          </CardContent>
-          <CardFooter className='flex justify-between items-center wflex-row'>
-            <div>
-              <Button onClick={handleRowAddition}>Add Item</Button>
-            </div>
-            <div>
-              Grand Total: Rs. {calculateGrandTotal().toFixed(2)}
-            </div>
-          </CardFooter>
-        </Card>
-
-        <Button variant={'secondary'} type="submit">Create Invoice</Button>
-      </form>
-    </section>
-  )
+        </section>
+    );
 }
 
-export default Page;
+export default page;

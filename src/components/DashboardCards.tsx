@@ -31,7 +31,7 @@ const DashboardCards = () => {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Link href="/invoice">
+          <Link href="/createInvoice">
             <Button>Create New Invoice</Button>
           </Link>
         </CardFooter>
