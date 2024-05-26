@@ -183,23 +183,24 @@ const Page = () => {
           <CardContent className='mb-5'>
             <Card x-chunk="dashboard-05-chunk-3">
               <CardContent>
-                <div className="table-responsive">
-                  <Table>
+                <div className="overflow-auto">
+                  <Table className="min-w-full">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead className="table-cell">Quantity</TableHead>
-                        <TableHead className="table-cell">Unit Price</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead className='hidden md:table-cell'>Product</TableHead>
+                        <TableHead className="hidden md:table-cell">Quantity</TableHead>
+                        <TableHead className="hidden md:table-cell">Unit Price</TableHead>
+                        <TableHead className="hidden md:table-cell">Amount</TableHead>
+                        <TableHead className="hidden md:table-cell">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {products.map((product, index) => (
-                        <TableRow key={index} className="bg-accent">
+                        <TableRow key={index} className="bg-accent grid grid-flow-row md:grid-cols-2">
                           <TableCell>
                             <Input
                               type="text"
+                              placeholder='Product'
                               value={product.product}
                               onChange={(e) => handleInputChange(index, 'product', e.target.value)}
                             />
@@ -207,6 +208,7 @@ const Page = () => {
                           <TableCell className="table-cell">
                             <Input
                               type="number"
+                              placeholder='Quantity'
                               value={product.quantity}
                               onChange={(e) => handleInputChange(index, 'quantity', Number(e.target.value))}
                             />
@@ -214,6 +216,7 @@ const Page = () => {
                           <TableCell className="table-cell">
                             <Input
                               type="number"
+                              placeholder='Unit Price'
                               value={product.UnitPrice}
                               onChange={(e) => handleInputChange(index, 'UnitPrice', Number(e.target.value))}
                             />
@@ -229,8 +232,8 @@ const Page = () => {
                               onClick={() => handleDeletion(index)}
                             >
                               <Trash className="h-3.5 w-3.5" />
-                          <span className="not-sr-only">Delete</span>
-                        </Button>
+                              <span className="not-sr-only">Delete</span>
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -240,7 +243,7 @@ const Page = () => {
               </CardContent>
             </Card>
           </CardContent>
-          <CardFooter className='flex justify-between items-center flex-col md:flex-row'>
+          <CardFooter className='flex justify-between items-center wflex-row'>
             <div>
               <Button onClick={handleRowAddition}>Add Item</Button>
             </div>
