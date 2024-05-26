@@ -30,6 +30,7 @@ type Products = {
 
 const Page = () => {
   const [products, setProducts] = useState<Products[]>([]);
+  // const [total, setTotal] = useState(0)
 
   const handleRowAddition = () => {
     setProducts([...products, { product: '', quantity: 1, UnitPrice: 0, TotalAmount: 0 }]);
@@ -42,8 +43,9 @@ const Page = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const invoice = { data, products };
-    console.log(invoice);
+    const grandTotal = calculateGrandTotal();
+    const invoice = { ...data, products, grandTotal };
+    console.log('Invoice:', invoice); // Should include form data, products, and grand total
   };
 
   const handleInputChange = (index: number, field: string, value: string | number) => {
@@ -186,7 +188,7 @@ const Page = () => {
                 <div className="overflow-auto">
                   <Table className="min-w-full">
                     <TableHeader>
-                      <TableRow>
+                      <TableRow className='grid grid-cols-5 items-center pt-5'>
                         <TableHead className='hidden md:table-cell'>Product</TableHead>
                         <TableHead className="hidden md:table-cell">Quantity</TableHead>
                         <TableHead className="hidden md:table-cell">Unit Price</TableHead>
@@ -196,7 +198,7 @@ const Page = () => {
                     </TableHeader>
                     <TableBody>
                       {products.map((product, index) => (
-                        <TableRow key={index} className="bg-accent grid grid-flow-row md:grid-cols-2">
+                        <TableRow key={index} className="bg-accent grid justify-between grid-cols-1 md:grid-cols-5 items-center">
                           <TableCell>
                             <Input
                               type="text"
