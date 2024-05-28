@@ -4,6 +4,7 @@ import {
   Menu
 } from "lucide-react"
 import Link from "next/link";
+import Image from "next/Image"
 
 
 const MobileNav = () => {
@@ -18,7 +19,7 @@ const MobileNav = () => {
         <SheetContent className="bg-white drop-shadow-[-100px 0px 30px -10px rgba(0,0,0,0.1)]">
           <div>
             <Link href="/">
-                <img src="/saffaenterprises.png" alt="logo" className="h-32 w-32" />
+                <Image src="/saffaenterprises.png" alt="logo" className="h-32 w-32" />
             </Link>
           </div>
           <NavItems />
