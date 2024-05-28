@@ -17,6 +17,7 @@ type Inputs = {
   OrganizationTel: number;
   OrganizationAddress: string;
   InvoiceDate: string;
+  PoNumber: number
   DCNo: number;
   DCDate: string;
 }
@@ -30,6 +31,7 @@ type Products = {
 
 const Page = () => {
   const [products, setProducts] = useState<Products[]>([]);
+  // const [total, setTotal] = useState(0)
 
   const handleRowAddition = () => {
     setProducts([...products, { product: '', quantity: 1, UnitPrice: 0, TotalAmount: 0 }]);
@@ -42,8 +44,9 @@ const Page = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const invoice = { data, products };
-    console.log(invoice);
+    const grandTotal = calculateGrandTotal();
+    const invoice = { ...data, products, grandTotal };
+    console.log('Invoice:', invoice); // Should include form data, products, and grand total
   };
 
   const handleInputChange = (index: number, field: string, value: string | number) => {
@@ -171,6 +174,13 @@ const Page = () => {
                 />
                 {errors.InvoiceDate && <p className="error">Invoice Date is required</p>}
               </div>
+              <div className='flex flex-col items-start justify-between'>
+                <Label className='mb-2'>PO. No.</Label>
+                <Input type='number'
+                  {...register('PoNumber', { required: true })}
+                />
+                {errors.PoNumber && <p className="error">PO. No. is required</p>}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -183,23 +193,24 @@ const Page = () => {
           <CardContent className='mb-5'>
             <Card x-chunk="dashboard-05-chunk-3">
               <CardContent>
-                <div className="table-responsive">
-                  <Table>
+                <div className="overflow-auto">
+                  <Table className="min-w-full">
                     <TableHeader>
-                      <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead className="table-cell">Quantity</TableHead>
-                        <TableHead className="table-cell">Unit Price</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                      <TableRow className='grid grid-cols-5 items-center pt-5'>
+                        <TableHead className='hidden md:table-cell'>Product</TableHead>
+                        <TableHead className="hidden md:table-cell">Quantity</TableHead>
+                        <TableHead className="hidden md:table-cell">Unit Price</TableHead>
+                        <TableHead className="hidden md:table-cell">Amount</TableHead>
+                        <TableHead className="hidden md:table-cell">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {products.map((product, index) => (
-                        <TableRow key={index} className="bg-accent">
+                        <TableRow key={index} className="bg-accent grid justify-between grid-cols-1 md:grid-cols-5 items-center">
                           <TableCell>
                             <Input
                               type="text"
+                              placeholder='Product'
                               value={product.product}
                               onChange={(e) => handleInputChange(index, 'product', e.target.value)}
                             />
@@ -207,6 +218,7 @@ const Page = () => {
                           <TableCell className="table-cell">
                             <Input
                               type="number"
+                              placeholder='Quantity'
                               value={product.quantity}
                               onChange={(e) => handleInputChange(index, 'quantity', Number(e.target.value))}
                             />
@@ -214,6 +226,7 @@ const Page = () => {
                           <TableCell className="table-cell">
                             <Input
                               type="number"
+                              placeholder='Unit Price'
                               value={product.UnitPrice}
                               onChange={(e) => handleInputChange(index, 'UnitPrice', Number(e.target.value))}
                             />
@@ -229,8 +242,8 @@ const Page = () => {
                               onClick={() => handleDeletion(index)}
                             >
                               <Trash className="h-3.5 w-3.5" />
-                          <span className="not-sr-only">Delete</span>
-                        </Button>
+                              <span className="not-sr-only">Delete</span>
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -240,7 +253,7 @@ const Page = () => {
               </CardContent>
             </Card>
           </CardContent>
-          <CardFooter className='flex justify-between items-center flex-col md:flex-row'>
+          <CardFooter className='flex justify-between items-center wflex-row'>
             <div>
               <Button onClick={handleRowAddition}>Add Item</Button>
             </div>
@@ -250,7 +263,7 @@ const Page = () => {
           </CardFooter>
         </Card>
 
-        <Button variant={'secondary'} type="submit">Update Invoice</Button>
+        <Button variant={'secondary'} type="submit">Create Invoice</Button>
       </form>
     </section>
   )

@@ -17,6 +17,7 @@ type Inputs = {
   OrganizationTel: number;
   OrganizationAddress: string;
   InvoiceDate: string;
+  PoNumber: number
   DCNo: number;
   DCDate: string;
 }
@@ -172,6 +173,13 @@ const Page = () => {
                   {...register('InvoiceDate', { required: true })}
                 />
                 {errors.InvoiceDate && <p className="error">Invoice Date is required</p>}
+              </div>
+              <div className='flex flex-col items-start justify-between'>
+                <Label className='mb-2'>PO. No.</Label>
+                <Input type='number'
+                  {...register('PoNumber', { required: true })}
+                />
+                {errors.PoNumber && <p className="error">PO. No. is required</p>}
               </div>
             </div>
           </CardContent>

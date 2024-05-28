@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from 'next/router'
 
 type Inputs = {
   email: string;
@@ -12,6 +13,8 @@ type Inputs = {
 };
 
 const Page = () => {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -19,8 +22,25 @@ const Page = () => {
     formState: { errors },
   } = useForm<Inputs>()
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try{
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+      })
+  
+      if(response.ok){
+        console.log('Successfully Logged in');
+        router.push('/')
+      } else {
+        console.log("Can't find user")
+      }
+    } catch (error) {
+      console.log('Error in Logging in: ', error)
+    }
   }
 
   return (
