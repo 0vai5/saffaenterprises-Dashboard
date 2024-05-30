@@ -8,6 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type Inputs = {
   ClientNo: number;
@@ -30,6 +31,7 @@ type Products = {
 }
 
 const Page = () => {
+  const router = useRouter()
   const [products, setProducts] = useState<Products[]>([]);
   // const [total, setTotal] = useState(0)
 
@@ -43,11 +45,28 @@ const Page = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const grandTotal = calculateGrandTotal();
     const invoice = { ...data, products, grandTotal };
-    console.log('Invoice:', invoice); // Should include form data, products, and grand total
+  
+    try {
+      const response = await fetch('/api/invoice/createInvoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(invoice)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create Invoice');
+      }
+  
+      router.push('/');
+  
+    } catch (error) {
+      console.log('There was an Error While Creating an Invoice: ', error);
+    }
   };
+  
 
   const handleInputChange = (index: number, field: string, value: string | number) => {
     setProducts((prevProducts) => {

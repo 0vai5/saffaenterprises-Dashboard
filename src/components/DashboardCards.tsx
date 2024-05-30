@@ -38,7 +38,7 @@ const DashboardCards = () => {
       </Card>
       <Card className="w-full" x-chunk="dashboard-05-chunk-1">
         <CardHeader className="pb-2">
-          <CardDescription>Upcoming Payments</CardDescription>
+          <CardDescription>Recent Invoices</CardDescription>
           <CardTitle className="text-4xl">$250</CardTitle>
         </CardHeader>
         <CardContent>
@@ -47,7 +47,6 @@ const DashboardCards = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Customer</TableHead>
-                  <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="hidden md:table-cell">Date</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
                 </TableRow>
@@ -59,11 +58,6 @@ const DashboardCards = () => {
                     <div className="hidden text-sm text-muted-foreground md:inline">
                       liam@example.com
                     </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge className="text-xs" variant="secondary">
-                      pending
-                    </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     2023-06-23

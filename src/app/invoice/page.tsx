@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table"
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
+import ReactToPrint from 'react-to-print'
 
 const page = () => {
     return (
