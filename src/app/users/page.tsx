@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ type User = {
 const Page = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -35,11 +36,12 @@ const Page = () => {
       const result = await response.json();
       if (response.ok) {
         setUsers(result.data);
+        setError(null);
       } else {
-        console.error('Failed to fetch users:', result.message);
+        setError(result.message);
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      setError('Error fetching users');
     }
   };
 
@@ -101,20 +103,25 @@ const Page = () => {
         <CardTitle>Active Users</CardTitle>
         <CardDescription>All the Users Currently Active</CardDescription>
         <CardContent>
-          <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
-            {users.map((user) => (
-              <Card key={user._id} className='px-5 py-5'>
-                <CardTitle>{user.username}</CardTitle>
-                <CardContent>
-                  <p>{user.email}</p>
-                </CardContent>
-                <CardFooter>
-                  <Button onClick={() => deleteUser(user._id)}>Delete User</Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
+  {users ? (
+    <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
+      {users.map((user) => (
+        <Card key={user._id} className='px-5 py-5'>
+          <CardTitle>{user.username}</CardTitle>
+          <CardContent>
+            <p>{user.email}</p>
+          </CardContent>
+          <CardFooter>
+            <Button onClick={() => deleteUser(user._id)}>Delete User</Button>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  ) : (
+    <p>No users found.</p>
+  )}
+</CardContent>
+
       </Card>
 
       <Card className="w-full max-w-sm">
