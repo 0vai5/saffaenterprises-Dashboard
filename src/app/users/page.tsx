@@ -103,24 +103,24 @@ const Page = () => {
         <CardTitle>Active Users</CardTitle>
         <CardDescription>All the Users Currently Active</CardDescription>
         <CardContent>
-  {users ? (
-    <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
-      {users.map((user) => (
-        <Card key={user._id} className='px-5 py-5'>
-          <CardTitle>{user.username}</CardTitle>
-          <CardContent>
-            <p>{user.email}</p>
-          </CardContent>
-          <CardFooter>
-            <Button onClick={() => deleteUser(user._id)}>Delete User</Button>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
-  ) : (
-    <p>No users found.</p>
-  )}
-</CardContent>
+          {users ? (
+            <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
+              {users.map((user) => (
+                <Card key={user._id} className='px-5 py-5'>
+                  <CardTitle>{user.username}</CardTitle>
+                  <CardContent>
+                    <p>{user.email}</p>
+                  </CardContent>
+                  <CardFooter>
+                    <Button onClick={() => deleteUser(user._id)}>Delete User</Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <p>No users found.</p>
+          )}
+        </CardContent>
 
       </Card>
 
