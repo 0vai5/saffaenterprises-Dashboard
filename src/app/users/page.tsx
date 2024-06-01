@@ -1,5 +1,4 @@
-'use client';
-
+import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +21,7 @@ type User = {
 const Page = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -35,11 +35,12 @@ const Page = () => {
       const result = await response.json();
       if (response.ok) {
         setUsers(result.data);
+        setError(null);
       } else {
-        console.error('Failed to fetch users:', result.message);
+        setError(result.message);
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      setError('Error fetching users');
     }
   };
 
@@ -101,6 +102,8 @@ const Page = () => {
         <CardTitle>Active Users</CardTitle>
         <CardDescription>All the Users Currently Active</CardDescription>
         <CardContent>
+          {error && <p>{error}</p>}
+          {users.length === 0 && !error && <p>No users found.</p>}
           <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
             {users.map((user) => (
               <Card key={user._id} className='px-5 py-5'>
