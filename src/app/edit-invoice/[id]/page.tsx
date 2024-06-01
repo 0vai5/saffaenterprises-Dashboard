@@ -66,7 +66,6 @@ const Page = () => {
   const handleDeletion = (index: number) => {
     setProducts(products.filter((_, i) => i !== index));
   }
-
   return (
     <section className='max-container'>
       <form className='flex flex-col justify-between gap-4' onSubmit={handleSubmit(onSubmit)}>
