@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -21,23 +21,29 @@ type User = {
 
 const Page = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<Inputs>();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('/api/users/findUser');
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/users/findUsers');
+      const result = await response.json();
+      if (response.ok) {
+        setUsers(result.data);
+      } else {
+        console.error('Failed to fetch users:', result.message);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -50,7 +56,7 @@ const Page = () => {
         },
         body: JSON.stringify({ id: userId }),
       });
-  
+
       if (response.ok) {
         setUsers((prevUsers) => prevUsers.filter(user => user._id !== userId));
       } else {
@@ -62,6 +68,7 @@ const Page = () => {
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true);
     try {
       const response = await fetch('/api/users/createUser', {
         method: 'POST',
@@ -72,16 +79,21 @@ const Page = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create user');
+        const result = await response.json();
+        throw new Error(result.message || 'Failed to create user');
       }
 
       const newUser = await response.json();
+      fetchUsers()
       setUsers((prevUsers) => [...prevUsers, newUser]);
+      reset();
+
     } catch (error) {
       console.error('Error creating user:', error);
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
     <section className="max-container gap-5">
@@ -112,7 +124,7 @@ const Page = () => {
             Fill out the following form to create a new user
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} method="post">
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -140,7 +152,9 @@ const Page = () => {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full">Create User</Button>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Creating...' : 'Create User'}
+            </Button>
           </CardFooter>
         </form>
       </Card>
