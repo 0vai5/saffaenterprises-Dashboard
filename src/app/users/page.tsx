@@ -104,7 +104,7 @@ const Page = () => {
         <CardDescription>All the Users Currently Active</CardDescription>
         <CardContent>
           {error && <p>{error}</p>}
-          {users.length === 0 && !error && <p>No users found.</p>}
+          {users && users.length === 0 && !error && <p>No users found.</p>}
           <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
             {users.map((user) => (
               <Card key={user._id} className='px-5 py-5'>
