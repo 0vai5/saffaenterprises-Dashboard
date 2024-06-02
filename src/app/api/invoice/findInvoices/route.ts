@@ -6,7 +6,7 @@ Connect();
 
 export async function GET() {
     try {
-        const invoices = await Invoice.find().sort({ createdAt: -1 }).limit(3);
+        const invoices = await Invoice.find();
         if (!invoices) {
             return NextResponse.json({
                 message: "No invoices found",

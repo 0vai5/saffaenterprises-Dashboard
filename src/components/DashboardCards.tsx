@@ -87,52 +87,6 @@ const DashboardCards = () => {
           <CardDescription>Recent Invoices</CardDescription>
           <CardTitle className="text-4xl">Rs. {totalGrandTotal.toFixed(2)}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-xs text-muted-foreground">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Customer</TableHead>
-                  <TableHead className="hidden md:table-cell">Date</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {invoices && invoices.length > 0 ? (
-                  invoices.map((invoice, index) => (
-                    <TableRow key={index} className="bg-accent">
-
-                      <TableCell>
-                        <Link href={'/invoice/' + invoice._id}>
-                          <div className="font-medium">{invoice.OrganizationName}</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            {invoice.ClientEmail}
-                          </div>
-                        </Link>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <Link href={'/invoice/' + invoice._id}>
-                          {invoice.InvoiceDate}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Link href={'/invoice/' + invoice._id}>
-                          Rs. {invoice.grandTotal.toFixed(2)}
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={3} className="text-center">
-                      <p>No Invoices Found</p>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
       </Card>
     </div>
   );
