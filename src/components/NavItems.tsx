@@ -31,7 +31,7 @@ const NavItems = () => {
       </li>
       <li>
         <Link href="/createInvoice">
-          <h4 className="text-xl font-semibold">Invoice</h4>
+          <h4 className="text-xl font-semibold">Create Invoice</h4>
         </Link>
       </li>
       <li>

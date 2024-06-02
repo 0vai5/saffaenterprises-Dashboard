@@ -1,4 +1,6 @@
-import React from "react";
+'use client'
+
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -19,7 +21,51 @@ import {
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 
+type Invoice = {
+  _id: string;
+  ClientNo: number;
+  ClientEmail: string;
+  ClientName: string;
+  OrganizationName: string;
+  OrganizationTel: number;
+  OrganizationAddress: string;
+  InvoiceDate: string;
+  PoNumber: number;
+  DCNo: number;
+  DCDate: string;
+  products: {
+    product: string;
+    quantity: number;
+    unitPrice: number;
+    total: number;
+  }[];
+  grandTotal: number;
+};
+
 const DashboardCards = () => {
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const response = await fetch('/api/invoice/findInvoices');
+        if (!response.ok) {
+          throw new Error('Error in fetching Invoices');
+        }
+        const data = await response.json();
+        setInvoices(data.invoices);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchInvoices();
+  }, []);
+
+  // Calculate the total grand total of all invoices
+  const totalGrandTotal = invoices.reduce(
+    (total, invoice) => total + invoice.grandTotal,
+    0
+  );
+
   return (
     <div className="flex justify-evenly items-center gap-5 md:flex-row flex-col w-full mb-10">
       <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
@@ -39,7 +85,7 @@ const DashboardCards = () => {
       <Card className="w-full" x-chunk="dashboard-05-chunk-1">
         <CardHeader className="pb-2">
           <CardDescription>Recent Invoices</CardDescription>
-          <CardTitle className="text-4xl">$250</CardTitle>
+          <CardTitle className="text-4xl">Rs. {totalGrandTotal.toFixed(2)}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-xs text-muted-foreground">
@@ -52,18 +98,37 @@ const DashboardCards = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow className="bg-accent">
-                  <TableCell>
-                    <div className="font-medium">Liam Johnson</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      liam@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    2023-06-23
-                  </TableCell>
-                  <TableCell className="text-right">$250.00</TableCell>
-                </TableRow>
+                {invoices && invoices.length > 0 ? (
+                  invoices.map((invoice, index) => (
+                    <TableRow key={index} className="bg-accent">
+
+                      <TableCell>
+                        <Link href={'/invoice/' + invoice._id}>
+                          <div className="font-medium">{invoice.OrganizationName}</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            {invoice.ClientEmail}
+                          </div>
+                        </Link>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <Link href={'/invoice/' + invoice._id}>
+                          {invoice.InvoiceDate}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Link href={'/invoice/' + invoice._id}>
+                          Rs. {invoice.grandTotal.toFixed(2)}
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} className="text-center">
+                      <p>No Invoices Found</p>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>

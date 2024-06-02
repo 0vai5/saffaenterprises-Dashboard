@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
+import Header from "@/components/Header";
 
 type Inputs = {
   email: string;
@@ -97,6 +98,8 @@ const Page = () => {
   };
 
   return (
+    <>
+    <Header />
     <section className="max-container gap-5">
       <Card className='px-4 py-4 mb-5'>
         <CardTitle>Active Users</CardTitle>
@@ -164,6 +167,7 @@ const Page = () => {
         </form>
       </Card>
     </section>
+    </>
   );
 };
 

@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from 'next/navigation'
+import Link from "next/link";
+import Image from "next/image";
 
 type Inputs = {
   email: string;
@@ -23,16 +25,16 @@ const Page = () => {
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try{
+    try {
       const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
+        },
+        body: JSON.stringify(data),
       })
-  
-      if(response.ok){
+
+      if (response.ok) {
         console.log('Successfully Logged in');
         router.push('/')
       } else {
@@ -44,42 +46,55 @@ const Page = () => {
   }
 
   return (
-    <section className="container flex justify-center items-center min-h-screen">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                {...register('email', {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                    message: "Invalid email address"
-                  }
-                })} />
-              {errors.email && <p>{errors.email.message}</p>}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input {...register('password', { required: true })} />
-            </div>
-          </CardContent>
+    <>
+      <div>
+        <Link
+          href="/"
+        >
+          <Image
+            src={'/saffaenterprises.png'}
+            alt="Company Logo"
+            width={150}
+            height={150}
+          />
+        </Link>
+      </div>
+      <section className="container flex justify-center items-center min-h-screen">
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardDescription>
+              Enter your email below to login to your account.
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  {...register('email', {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                      message: "Invalid email address"
+                    }
+                  })} />
+                {errors.email && <p>{errors.email.message}</p>}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input {...register('password', { required: true })} />
+              </div>
+            </CardContent>
 
-          <CardFooter>
-            <Button type="submit" className="w-full">Sign in</Button>
-          </CardFooter>
-        </form>
-      </Card>
-
-    </section>
+            <CardFooter>
+              <Button type="submit" className="w-full">Sign in</Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </section>
+    </>
   );
 };
 

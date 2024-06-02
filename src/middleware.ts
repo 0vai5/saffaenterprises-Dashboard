@@ -30,9 +30,7 @@ export const config = {
         '/',
         '/login',
         '/users',
-        '/invoice',
         '/createInvoice',
-        '/edit-invoice',
         '/search',
     ],
 };
