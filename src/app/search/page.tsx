@@ -38,7 +38,7 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 
 type Inputs = {
-  Organization: string;
+  OrganizationName: string;
   Date: string;
 };
 
@@ -70,14 +70,14 @@ const Search = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (formData) => {
+  const onSubmit: SubmitHandler<Inputs> = async (FormData) => {
     try {
-      const response = await fetch('/api/users/searchInvoice', {
+      const response = await fetch('/api/invoice/searchInvoices', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(FormData),
       });
 
       if (!response.ok) {
@@ -85,7 +85,7 @@ const Search = () => {
       }
 
       const result = await response.json();
-      setData(result);
+      setData(result.data);
     } catch (error) {
       console.error('An error occurred while fetching data:', error);
     }
@@ -93,7 +93,7 @@ const Search = () => {
 
   const deleteInvoice = async (_id: string) => {
     try {
-      const response = await fetch('/api/users/deleteInvoice', {
+      const response = await fetch('/api/invoice/deleteInvoice', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,11 +125,11 @@ const Search = () => {
               <Label>Search</Label>
               <Input
                 type='text'
-                {...register('Organization', { required: true })}
+                {...register('OrganizationName', { required: true })}
                 placeholder='Invoice ID or Organisation'
                 className='border rounded-lg border-slate-400 px-3 py-1'
               />
-              {errors.Organization && <p className='error'>Organization is required</p>}
+              {errors.OrganizationName && <p className='error'>Organization is required</p>}
             </div>
             <div className='flex justify-start flex-col items-start'>
               <Label>Date</Label>
@@ -170,7 +170,7 @@ const Search = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.length > 0 ? (
+                {data && data.length > 0 ? (
                   data.map((invoice, index) => (
                     <TableRow key={index} className='bg-accent'>
                       <TableCell>

@@ -26,17 +26,16 @@ type Inputs = {
 type Products = {
   product: string;
   quantity: number;
-  UnitPrice: number;
-  TotalAmount: number;
+  unitPrice: number;
+  total: number;
 }
 
 const Page = () => {
   const router = useRouter()
   const [products, setProducts] = useState<Products[]>([]);
-  // const [total, setTotal] = useState(0)
 
   const handleRowAddition = () => {
-    setProducts([...products, { product: '', quantity: 1, UnitPrice: 0, TotalAmount: 0 }]);
+    setProducts([...products, { product: '', quantity: 1, unitPrice: 0, total: 0 }]);
   }
 
   const {
@@ -72,14 +71,16 @@ const Page = () => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
       const product = { ...updatedProducts[index], [field]: value };
-      product.TotalAmount = product.quantity * product.UnitPrice;
+
+      // Recalculate total
+      product.total = product.quantity * product.unitPrice;
       updatedProducts[index] = product;
       return updatedProducts;
     });
   }
 
   const calculateGrandTotal = () => {
-    return products.reduce((total, product) => total + product.TotalAmount, 0);
+    return products.reduce((total, product) => total + product.total, 0);
   }
 
   const handleDeletion = (index: number) => {
@@ -246,12 +247,12 @@ const Page = () => {
                             <Input
                               type="number"
                               placeholder='Unit Price'
-                              value={product.UnitPrice}
-                              onChange={(e) => handleInputChange(index, 'UnitPrice', Number(e.target.value))}
+                              value={product.unitPrice}
+                              onChange={(e) => handleInputChange(index, 'unitPrice', Number(e.target.value))}
                             />
                           </TableCell>
                           <TableCell className="text-right">
-                            Rs. {product.TotalAmount.toFixed(2)}
+                            Rs. {product.total ? product.total.toFixed(2) : '0.00'}
                           </TableCell>
                           <TableCell className="text-right">
                             <Button
