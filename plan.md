@@ -1,14 +1,7 @@
-{Login}:
-api/users/login
-
-{Register}:
-api/users/login
 
 {GetUsers}:
 api/users/GetUsers
 
-{DeleteUser}:
-api/users/deleteuser
 
 {createInvoice}:
 api/invoices/createInvoice

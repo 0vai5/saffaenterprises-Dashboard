@@ -27,7 +27,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1h' });
 
-    // Set the token as an HTTP-only cookie
     const response = NextResponse.json({
       message: 'Successfully logged in as: ' + user.username,
       success: true,

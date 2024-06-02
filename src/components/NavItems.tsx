@@ -8,6 +8,20 @@ import { LogOut } from "lucide-react";
 const NavItems = () => {
   const router = useRouter();
 
+  const LogoutHandler = async () => {
+    try {
+      const response = await fetch('/api/users/logout')
+      if (response.ok) {
+        router.push('/login')
+      } else {
+        console.error('Logout failed: ', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error during logout: ', error)
+    }
+  }
+  
+
   return (
     <ul className="flex flex-col md:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
       <li>
@@ -35,6 +49,7 @@ const NavItems = () => {
           size="sm"
           variant="outline"
           className="h-7 gap-1 text-sm"
+          onClick={LogoutHandler}
         >
           <LogOut className="h-3.5 w-3.5" />
           <span className="not-sr-only">LogOut</span>
