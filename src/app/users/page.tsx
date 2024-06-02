@@ -32,7 +32,7 @@ const Page = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/users/findUsers');
+      const response = await fetch('/api/users/findUsers', { cache: 'no-store' });
       const result = await response.json();
       if (response.ok) {
         setUsers(result.data);
@@ -61,6 +61,7 @@ const Page = () => {
 
       if (response.ok) {
         await fetchUsers();
+        // setUsers(prevUsers => prevUsers.filter(user => user._id !== userId));
       } else {
         console.log('Failed to delete user');
       }
