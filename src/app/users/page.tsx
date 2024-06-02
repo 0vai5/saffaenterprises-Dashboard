@@ -30,22 +30,23 @@ const Page = () => {
     reset,
   } = useForm<Inputs>();
 
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('/api/users/findUsers');
-      const result = await response.json();
-      if (response.ok) {
-        setUsers(result.data);
-        setError(null);
-      } else {
-        setError(result.message);
-      }
-    } catch (error) {
-      setError('Error fetching users');
-    }
-  };
-
+  
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('/api/users/findUsers');
+        const result = await response.json();
+        if (response.ok) {
+          setUsers(result.data);
+          setError(null);
+        } else {
+          setError(result.message);
+        }
+      } catch (error) {
+        setError('Error fetching users');
+      }
+    };
+    
     fetchUsers();
   }, []);
 
@@ -86,7 +87,6 @@ const Page = () => {
       }
 
       const newUser = await response.json();
-      fetchUsers()
       setUsers((prevUsers) => [...prevUsers, newUser]);
       reset();
 
