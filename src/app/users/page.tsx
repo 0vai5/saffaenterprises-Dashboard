@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,6 @@ const Page = () => {
     reset,
   } = useForm<Inputs>();
 
-  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -86,8 +85,18 @@ const Page = () => {
         throw new Error(result.message || 'Failed to create user');
       }
 
-      const newUser = await response.json();
-      setUsers((prevUsers) => [...prevUsers, newUser]);
+      const result = await response.json();
+      const newUser = result.data;
+      
+      // Debugging state update
+      setUsers((prevUsers) => {
+        if (!Array.isArray(prevUsers)) {
+          console.error('prevUsers is not an array:', prevUsers);
+          return prevUsers;
+        }
+        return [...prevUsers, newUser];
+      });
+
       reset();
 
     } catch (error) {
@@ -103,7 +112,7 @@ const Page = () => {
         <CardTitle>Active Users</CardTitle>
         <CardDescription>All the Users Currently Active</CardDescription>
         <CardContent>
-          {users ? (
+          {users.length > 0 ? (
             <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
               {users.map((user) => (
                 <Card key={user._id} className='px-5 py-5'>
@@ -121,7 +130,6 @@ const Page = () => {
             <p>No users found.</p>
           )}
         </CardContent>
-
       </Card>
 
       <Card className="w-full max-w-sm">
