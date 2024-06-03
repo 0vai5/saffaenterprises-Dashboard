@@ -72,7 +72,7 @@ const Page = ({ params }: any) => {
 
     return (
         <>
-            <div>
+            <div className='px-4 py-4'>
                 <Link
                     href="/"
                 >

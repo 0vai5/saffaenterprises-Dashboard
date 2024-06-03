@@ -40,7 +40,7 @@ const InvoiceSchema: Schema<Invoice> = new Schema({
         }
     ],
     grandTotal: { type: Number, required: true }
-}) 
+})
 
 const InvoiceModel = (mongoose.models.Invoice as mongoose.Model<Invoice>) || mongoose.model<Invoice>("Invoice", InvoiceSchema)
 export default InvoiceModel;

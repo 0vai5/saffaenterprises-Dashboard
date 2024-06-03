@@ -19,7 +19,7 @@ type Inputs = {
   OrganizationTel: number;
   OrganizationAddress: string;
   InvoiceDate: string;
-  PoNumber: number
+  PoNumber: number;
   DCNo: number;
   DCDate: string;
 }
@@ -47,46 +47,33 @@ const Page = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // Convert all text fields to lowercase
-    const processedData = {
-      ...data,
-      ClientEmail: data.ClientEmail.toLowerCase(),
-      ClientName: data.ClientName.toLowerCase(),
-      OrganizationName: data.OrganizationName.toLowerCase(),
-      OrganizationAddress: data.OrganizationAddress.toLowerCase(),
-    };
-
-    const processedProducts = products.map(product => ({
-      ...product,
-      product: product.product.toLowerCase()
-    }));
-
     const grandTotal = calculateGrandTotal();
-    const invoice = { ...processedData, products: processedProducts, grandTotal };
-
+    const invoice = { ...data, products, grandTotal };
+  
     try {
       const response = await fetch('/api/invoice/createInvoice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(invoice)
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to create Invoice');
       }
-
       reset();
-      setProducts([]);
-
+      setProducts([])
     } catch (error) {
       console.log('There was an Error While Creating an Invoice: ', error);
     }
   };
+  
 
   const handleInputChange = (index: number, field: string, value: string | number) => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
       const product = { ...updatedProducts[index], [field]: value };
+
+      // Recalculate total
       product.total = product.quantity * product.unitPrice;
       updatedProducts[index] = product;
       return updatedProducts;

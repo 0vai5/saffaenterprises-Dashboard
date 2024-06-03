@@ -34,12 +34,11 @@ const Page = () => {
         body: JSON.stringify(data),
       })
 
-      if (response.ok) {
-        console.log('Successfully Logged in');
-        router.push('/')
-      } else {
+      if (!response.ok) {
         console.log("Can't find user")
       }
+
+      router.push('/')
     } catch (error) {
       console.log('Error in Logging in: ', error)
     }
@@ -47,7 +46,7 @@ const Page = () => {
 
   return (
     <>
-      <div>
+      <div className="px-4 py-4">
         <Link
           href="/"
         >
@@ -59,7 +58,7 @@ const Page = () => {
           />
         </Link>
       </div>
-      <section className="container flex justify-center items-center min-h-screen">
+      <section className="container flex justify-center items-center">
         <Card className="w-full max-w-sm">
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
@@ -73,6 +72,7 @@ const Page = () => {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   type="email"
+                  placeholder="Enter Email"
                   {...register('email', {
                     required: "Email is required",
                     pattern: {
@@ -80,11 +80,12 @@ const Page = () => {
                       message: "Invalid email address"
                     }
                   })} />
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && <p className="text-red-700">{errors.email.message}</p>}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input {...register('password', { required: true })} />
+                <Input type="password" placeholder="Enter Password" {...register('password', { required: true })} />
+                {errors.email && <p className="text-red-700">{errors.email.message}</p>}
               </div>
             </CardContent>
 
