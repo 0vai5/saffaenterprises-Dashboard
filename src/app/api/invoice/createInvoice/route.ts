@@ -8,6 +8,7 @@ Connect();
 export async function POST(request: NextRequest) {
     try {
         const {
+            invoiceID,
             ClientNo,
             ClientEmail,
             ClientName,
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
        
 
         const newInvoice = new Invoice({
+            invoiceID,
             ClientNo,
             ClientEmail,
             ClientName,

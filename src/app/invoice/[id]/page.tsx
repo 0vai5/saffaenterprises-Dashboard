@@ -18,6 +18,7 @@ import ReactToPrint from 'react-to-print';
 import Link from 'next/link';
 
 type Invoice = {
+    invoiceID: string
     _id: string;
     ClientNo: number;
     ClientEmail: string;
@@ -107,12 +108,12 @@ const Page = ({ params }: any) => {
                 </div>
                 <div ref={cardRef}>
                     <Card>
-                        <CardHeader className='flex sm:flex-row flex-col justify-between sm:items-center items-start mb-0'>
+                        <CardHeader className='flex sm:flex-row flex-col justify-between sm:items-center items-start mb-0 max-h-[20vh]'>
                             <Image
                                 src={'/saffaenterprises.png'}
                                 alt='company logo'
-                                width={200}
-                                height={100}
+                                width={150}
+                                height={75}
                             />
                             <div className=''>
                                 <ul className='list-none flex justify-evenly flex-col '>
@@ -124,7 +125,7 @@ const Page = ({ params }: any) => {
                             </div>
                         </CardHeader>
                         <CardContent className='mb-2 max-container'>
-                            <CardTitle className='mb-6'>Invoice# <span className='font-light'>{invoice._id}</span></CardTitle>
+                            <CardTitle className='mb-6'>Invoice# <span className='font-light'>{invoice.invoiceID}</span></CardTitle>
                             <div className='flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0'>
                                 <div className="flex flex-col">
                                     <h1 className='text-base font-bold'>Billed To:</h1>
@@ -177,12 +178,12 @@ const Page = ({ params }: any) => {
                                 </CardContent>
                             </Card>
                         </CardContent>
-                        <CardFooter className='flex justify-between items-end md:items-center px-10 sm:flex-row flex-col-reverse  gap-[3rem]'>
-                            <div className='flex justify-end items-end flex-col gap-4'>
+                        <CardFooter className='flex justify-between items-end md:items-center px-10 sm:flex-row flex-col-reverse  gap-[1rem]'>
+                            <div className='flex justify-end items-end flex-col gap-2'>
                                 <Separator className='font-bold' />
                                 <p className='font-semibold'>Waseem Haroon</p>
                             </div>
-                            <div className='flex justify-end items-end flex-col gap-5'>
+                            <div className='flex justify-end items-end flex-col gap-2'>
                                 <p className='align-center'><span className='font-bold'>Total: </span>Rs. {invoice.grandTotal}</p>
                                 <Separator />
                                 <p><span className='font-bold'>Grand Total: </span>Rs. {invoice.grandTotal}</p>
