@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
+import toast, { Toaster } from "react-hot-toast";
 
 type Inputs = {
   email: string;
@@ -89,9 +90,11 @@ const Page = () => {
 
       await fetchUsers();
       reset();
-
-    } catch (error) {
+      const result = await response.json();
+      toast.success(result.message)
+    } catch (error: any) {
       console.error('Error creating user:', error);
+      toast.error(error.message)
     } finally {
       setLoading(false);
     }
@@ -101,6 +104,10 @@ const Page = () => {
     <>
     <Header />
     <section className="max-container gap-5">
+    <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
       <Card className='px-4 py-4 mb-5'>
         <CardTitle>Active Users</CardTitle>
         <CardDescription>All the Users Currently Active</CardDescription>

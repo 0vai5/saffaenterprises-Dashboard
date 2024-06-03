@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import toast, { Toaster } from 'react-hot-toast'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -76,15 +77,15 @@ const Search = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || response.statusText);
+        console.log('An error occured')
       }
 
       const result = await response.json();
       setData(result.data);
-    } catch (error) {
+      toast.success(result.message)
+    } catch (error: any) {
       console.error('An error occurred while fetching data:', error);
-      setError('An error occurred while fetching data:');
+      toast.error(error)
     }
   };
 
@@ -113,6 +114,10 @@ const Search = () => {
     <>
       <Header />
       <section className='max-container'>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+        />
         <Card className='mb-4'>
           <CardHeader>
             <CardTitle>Search</CardTitle>
@@ -207,6 +212,14 @@ const Search = () => {
                                       <Trash className='h-3.5 w-3.5' />
                                       <span className='not-sr-only'>Delete</span>
                                     </Button>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Link href={'/invoice/' + invoice._id}>
+                                      <Button size='sm' variant='outline' className='h-7 gap-1 text-sm'>
+                                        <Eye className='h-3.5 w-3.5' />
+                                        <span className='not-sr-only'>View</span>
+                                      </Button>
+                                    </Link>
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>

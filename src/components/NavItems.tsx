@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 const NavItems = () => {
   const router = useRouter();
@@ -13,6 +14,8 @@ const NavItems = () => {
       const response = await fetch('/api/users/logout')
       if (response.ok) {
         router.push('/login')
+        const result = await response.json();
+        toast.success(result.message)
       } else {
         console.error('Logout failed: ', response.statusText)
       }
@@ -23,6 +26,7 @@ const NavItems = () => {
   
 
   return (
+    <>
     <ul className="flex flex-col md:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
       <li>
         <Link href="/">
@@ -56,6 +60,11 @@ const NavItems = () => {
         </Button>
       </li>
     </ul>
+    <Toaster
+    position="top-right"
+    reverseOrder={false}
+  />
+  </>
   );
 };
 

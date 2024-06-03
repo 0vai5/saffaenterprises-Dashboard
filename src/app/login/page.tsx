@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
+import toast, { Toaster } from "react-hot-toast";
 
 type Inputs = {
   email: string;
@@ -33,16 +34,20 @@ const Page = () => {
         },
         body: JSON.stringify(data),
       })
-
+  
       if (!response.ok) {
         console.log("Can't find user")
       }
-
-      router.push('/')
-    } catch (error) {
+  
+      const result = await response.json();  
+      router.push('/');
+      toast.success(result.message);
+    } catch (error: any) {
       console.log('Error in Logging in: ', error)
+      toast.error(error)
     }
   }
+  
 
   return (
     <>
@@ -58,6 +63,10 @@ const Page = () => {
           />
         </Link>
       </div>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
       <section className="container flex justify-center items-center">
         <Card className="w-full max-w-sm">
           <CardHeader>
