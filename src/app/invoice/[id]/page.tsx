@@ -125,7 +125,7 @@ const Page = ({ params }: any) => {
                             </div>
                         </CardHeader>
                         <CardContent className='mb-2 max-container'>
-                            <CardTitle className='mb-6'>Invoice# <span className='font-light'>{invoice.invoiceID}</span></CardTitle>
+                            <CardTitle className='mb-3'>Invoice# <span className='font-light'>{invoice.invoiceID}</span></CardTitle>
                             <div className='flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0'>
                                 <div className="flex flex-col">
                                     <h1 className='text-base font-bold'>Billed To:</h1>
@@ -178,7 +178,7 @@ const Page = ({ params }: any) => {
                                 </CardContent>
                             </Card>
                         </CardContent>
-                        <CardFooter className='flex justify-between items-end md:items-center px-10 sm:flex-row flex-col-reverse  gap-[1rem]'>
+                        <CardFooter className='flex justify-between items-end md:items-center px-5 sm:flex-row flex-col-reverse  gap-[1rem]'>
                             <div className='flex justify-end items-end flex-col gap-2'>
                                 <Separator className='font-bold' />
                                 <p className='font-semibold'>Waseem Haroon</p>
