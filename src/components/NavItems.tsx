@@ -13,9 +13,9 @@ const NavItems = () => {
     try {
       const response = await fetch('/api/users/logout')
       if (response.ok) {
-        router.push('/login')
         const result = await response.json();
-        toast.success(result.message)
+        toast.success(result.message);
+        router.push('/login')
       } else {
         console.error('Logout failed: ', response.statusText)
       }
