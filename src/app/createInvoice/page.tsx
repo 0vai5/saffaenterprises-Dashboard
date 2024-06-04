@@ -17,18 +17,18 @@ type Inputs = {
   ClientNo: number;
   ClientEmail: string;
   ClientName: string;
-  OrganizationName: string;
-  OrganizationTel: number;
-  OrganizationAddress: string;
+  CompanyName: string;
+  CompanyTel: number;
+  CompanyAddress: string;
   InvoiceDate: string;
-  PoNumber: number;
+  PoNumber: string;
   DCNo: number;
   DCDate: string;
 }
 
 type Products = {
-  product: string;
-  quantity: number;
+  description: string;
+  unit: number;
   unitPrice: number;
   total: number;
 }
@@ -39,7 +39,7 @@ const Page = () => {
   const uid = new ShortUniqueId();
 
   const handleRowAddition = () => {
-    setProducts((prevProducts) => [...prevProducts, { product: '', quantity: 1, unitPrice: 0, total: 0 }]);
+    setProducts((prevProducts) => [...prevProducts, { description: '', unit: 1, unitPrice: 0, total: 0 }]);
   };
 
   const {
@@ -51,7 +51,7 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const grandTotal = calculateGrandTotal();
-    const invoice = {invoiceID: uid.rnd(6), ...data, products, grandTotal };
+    const invoice = {invoiceID: uid.rnd(10), ...data, products, grandTotal };
 
     try {
       const response = await fetch('/api/invoice/createInvoice', {
@@ -78,7 +78,7 @@ const Page = () => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
       const product = { ...updatedProducts[index], [field]: value };
-      product.total = product.quantity * product.unitPrice;
+      product.total = product.unit * product.unitPrice;
       updatedProducts[index] = product;
       return updatedProducts;
     });
@@ -104,7 +104,7 @@ const Page = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className='mb-3'>
-                Important Information about the Client and its Organization
+                Important Information about the Client and its Company
               </CardDescription>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className='flex flex-col items-start justify-between'>
@@ -140,31 +140,31 @@ const Page = () => {
                   {errors.ClientName && <p className="error">Client Name is required</p>}
                 </div>
                 <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>Organization Name</Label>
+                  <Label className='mb-2'>Company Name</Label>
                   <Input
                     type='text'
-                    placeholder='Enter Organization Name'
-                    {...register('OrganizationName', { required: true })}
+                    placeholder='Enter Company Name'
+                    {...register('CompanyName', { required: true })}
                   />
-                  {errors.OrganizationName && <p className="error">Organization Name is required</p>}
+                  {errors.CompanyName && <p className="error">Company Name is required</p>}
                 </div>
                 <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>Organization Tel#</Label>
+                  <Label className='mb-2'>Company Tel#</Label>
                   <Input
                     type='text'
-                    placeholder='Enter Organization Tel#'
-                    {...register('OrganizationTel', { required: true })}
+                    placeholder='Enter Company Tel#'
+                    {...register('CompanyTel', { required: true })}
                   />
-                  {errors.OrganizationTel && <p className="error">Organization Tel# is required</p>}
+                  {errors.CompanyTel && <p className="error">Company Tel# is required</p>}
                 </div>
                 <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>Organization Address</Label>
+                  <Label className='mb-2'>Company Address</Label>
                   <Input
                     type='text'
-                    placeholder='Enter Organization Address'
-                    {...register('OrganizationAddress', { required: true })}
+                    placeholder='Enter Company Address'
+                    {...register('CompanyAddress', { required: true })}
                   />
-                  {errors.OrganizationAddress && <p className="error">Organization Address is required</p>}
+                  {errors.CompanyAddress && <p className="error">Company Address is required</p>}
                 </div>
               </div>
             </CardContent>
@@ -204,7 +204,7 @@ const Page = () => {
                 </div>
                 <div className='flex flex-col items-start justify-between'>
                   <Label className='mb-2'>PO. No.</Label>
-                  <Input type='number'
+                  <Input type='text'
                     {...register('PoNumber', { required: true })}
                   />
                   {errors.PoNumber && <p className="error">PO. No. is required</p>}
@@ -223,8 +223,8 @@ const Page = () => {
                 <Table className="min-w-full">
                   <TableHeader>
                     <TableRow className='grid grid-cols-5 items-center pt-5'>
-                      <TableHead className='hidden md:table-cell'>Product</TableHead>
-                      <TableHead className="hidden md:table-cell">Quantity</TableHead>
+                      <TableHead className='hidden md:table-cell'>Description</TableHead>
+                      <TableHead className="hidden md:table-cell">Unit</TableHead>
                       <TableHead className="hidden md:table-cell">Unit Price</TableHead>
                       <TableHead className="hidden md:table-cell">Amount</TableHead>
                       <TableHead className="hidden md:table-cell">Actions</TableHead>
@@ -236,17 +236,17 @@ const Page = () => {
                         <TableCell>
                           <Input
                             type="text"
-                            placeholder='Product'
-                            value={product.product}
-                            onChange={(e) => handleInputChange(index, 'product', e.target.value)}
+                            placeholder='Description'
+                            value={product.description}
+                            onChange={(e) => handleInputChange(index, 'description', e.target.value)}
                           />
                         </TableCell>
                         <TableCell className="table-cell">
                           <Input
                             type="number"
-                            placeholder='Quantity'
-                            value={product.quantity}
-                            onChange={(e) => handleInputChange(index, 'quantity', Number(e.target.value))}
+                            placeholder='Unit'
+                            value={product.unit}
+                            onChange={(e) => handleInputChange(index, 'unit', Number(e.target.value))}
                           />
                         </TableCell>
                         <TableCell className="table-cell">

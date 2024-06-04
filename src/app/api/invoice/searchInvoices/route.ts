@@ -20,11 +20,11 @@ export async function POST(request: NextRequest) {
         const invoices = await Invoice.find({
             $or: [
                 { invoiceId: { $regex: regex } },
-                { OrganizationName: { $regex: regex } },
+                { CompanyName: { $regex: regex } },
                 { ClientName: { $regex: regex } },
                 { ClientEmail: { $regex: regex } },
+                { PoNumber: {$regex: regex} },
                 ...(numericQuery !== null ? [
-                    { PoNumber: numericQuery },
                     { ClientNo: numericQuery }
                 ] : [])
             ]

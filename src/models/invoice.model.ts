@@ -5,16 +5,16 @@ export interface Invoice extends Document {
     ClientNo: number;
     ClientEmail: string;
     ClientName: string;
-    OrganizationName: string;
-    OrganizationTel: number;
-    OrganizationAddress: string;
+    CompanyName: string;
+    CompanyTel: number;
+    CompanyAddress: string;
     InvoiceDate: string;
-    PoNumber: number
+    PoNumber: string
     DCNo: number;
     DCDate: string;
     products: Array<{
-        product: string,
-        quantity: number,
+        description: string,
+        unit: number,
         unitPrice: number,
         total: number
     }>;
@@ -28,17 +28,17 @@ const InvoiceSchema: Schema<Invoice> = new Schema({
     ClientNo: { type: Number, required: true },
     ClientEmail: { type: String, required: true },
     ClientName: { type: String, required: true },
-    OrganizationName: { type: String, required: true },
-    OrganizationTel: { type: Number, required: true },
-    OrganizationAddress: { type: String, required: true },
+    CompanyName: { type: String, required: true },
+    CompanyTel: { type: Number, required: true },
+    CompanyAddress: { type: String, required: true },
     InvoiceDate: { type: String, required: true },
-    PoNumber: { type: Number, required: true },
+    PoNumber: { type: String, required: true },
     DCNo: { type: Number, required: true },
     DCDate: { type: String, required: true },
     products: [
         {
-            product: { type: String, required: true },
-            quantity: { type: Number, required: true },
+            description: { type: String, required: true },
+            unit: { type: Number, required: true },
             unitPrice: { type: Number, required: true },
             total: { type: Number, required: true }
         }

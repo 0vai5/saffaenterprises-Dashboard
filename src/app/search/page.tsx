@@ -48,13 +48,14 @@ type Invoice = {
   OrganizationTel: number;
   OrganizationAddress: string;
   InvoiceDate: string;
-  PoNumber: number;
+  PoNumber: string;
   DCNo: number;
   DCDate: string;
   products: {
-    name: string;
-    quantity: number;
-    price: number;
+    description: string;
+    unit: number;
+    unitPrice: number
+    total: number;
   }[];
   grandTotal: number;
 };

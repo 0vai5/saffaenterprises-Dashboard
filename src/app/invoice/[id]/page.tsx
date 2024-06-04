@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil, ArrowDownToLine, Printer } from 'lucide-react';
+import { ArrowDownToLine, Printer } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
@@ -17,22 +17,23 @@ import { Separator } from '@/components/ui/separator';
 import ReactToPrint from 'react-to-print';
 import Link from 'next/link';
 
+
 type Invoice = {
     invoiceID: string
     _id: string;
     ClientNo: number;
     ClientEmail: string;
     ClientName: string;
-    OrganizationName: string;
-    OrganizationTel: number;
-    OrganizationAddress: string;
+    CompanyName: string;
+    CompanyTel: number;
+    CompanyAddress: string;
     InvoiceDate: string;
-    PoNumber: number;
+    PoNumber: string;
     DCNo: number;
     DCDate: string;
     products: {
-        product: string;
-        quantity: number;
+        description: string;
+        unit: number;
         unitPrice: number;
         total: number;
     }[];
@@ -85,7 +86,7 @@ const Page = ({ params }: any) => {
                     />
                 </Link>
             </div>
-            <section className='container mt-[10rem]'>
+            <section className='container mt-[3vh]'>
                 <div className="flex items-center justify-end mb-4 gap-3">
                     <ReactToPrint
                         trigger={() => (
@@ -107,8 +108,8 @@ const Page = ({ params }: any) => {
                     />
                 </div>
                 <div ref={cardRef}>
-                    <Card>
-                        <CardHeader className='flex sm:flex-row flex-col justify-between sm:items-center items-start mb-0 max-h-[20vh]'>
+                    <Card >
+                        <CardHeader className='flex sm:flex-row flex-col justify-between sm:items-center items-start mb-[12rem] sm:mb-0 max-h-[20vh]'>
                             <Image
                                 src={'/saffaenterprises.png'}
                                 alt='company logo'
@@ -124,14 +125,13 @@ const Page = ({ params }: any) => {
                                 </ul>
                             </div>
                         </CardHeader>
-                        <CardContent className='mb-2 max-container'>
+                        <CardContent className='mb-2 container'>
                             <CardTitle className='mb-3'>Invoice# <span className='font-light'>{invoice.invoiceID}</span></CardTitle>
                             <div className='flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0'>
                                 <div className="flex flex-col">
                                     <h1 className='text-base font-bold'>Billed To:</h1>
-                                    <p><span className='font-semibold'>OrganizationName:</span> {invoice.OrganizationName}</p>
-                                    <p><span className='font-semibold'>OrganizationTel#:</span> +92{invoice.OrganizationTel}</p>
-                                    <p><span className='font-semibold'>OrganizationAddress:</span> {invoice.OrganizationAddress}</p>
+                                    <p><span className='font-semibold'>Company Name:</span> {invoice.CompanyName}</p>
+                                    <p><span className='font-semibold'>Company Address:</span> {invoice.CompanyAddress}</p>
                                 </div>
                                 <div className="flex flex-col">
                                     <p><span className='font-semibold'>P.O. No#: </span> {invoice.PoNumber}</p>
@@ -141,14 +141,14 @@ const Page = ({ params }: any) => {
                                 </div>
                             </div>
 
-                            <Card>
+                            <Card className='border-black/50'>
                                 <CardContent>
                                     <Table>
                                         <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Product</TableHead>
+                                            <TableRow >
+                                                <TableHead>Description</TableHead>
                                                 <TableHead className="hidden sm:table-cell">
-                                                    Quantity
+                                                    Unit
                                                 </TableHead>
                                                 <TableHead className="hidden sm:table-cell">
                                                     Unit Price
@@ -160,16 +160,16 @@ const Page = ({ params }: any) => {
                                             {invoice.products.map((product, index) => (
                                                 <TableRow key={index} className="bg-accent">
                                                     <TableCell>
-                                                        <div className="font-medium">{product.product}</div>
+                                                        <div className="font-medium">{product.description}</div>
                                                     </TableCell>
                                                     <TableCell className="hidden sm:table-cell">
-                                                        {product.quantity}
+                                                        {product.unit}
                                                     </TableCell>
                                                     <TableCell className="hidden sm:table-cell">
                                                         Rs. {product.unitPrice}
                                                     </TableCell>
                                                     <TableCell className="text-right">
-                                                        Rs. {product.quantity * product.unitPrice}
+                                                        Rs. {product.unit * product.unitPrice}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -178,7 +178,7 @@ const Page = ({ params }: any) => {
                                 </CardContent>
                             </Card>
                         </CardContent>
-                        <CardFooter className='flex justify-between items-end md:items-center px-5 sm:flex-row flex-col-reverse  gap-[1rem]'>
+                        <CardFooter className='flex justify-between items-end md:items-center px-5 sm:flex-row flex-col-reverse  gap-[4rem]'>
                             <div className='flex justify-end items-end flex-col gap-2'>
                                 <Separator className='font-bold' />
                                 <p className='font-semibold'>Waseem Haroon</p>
