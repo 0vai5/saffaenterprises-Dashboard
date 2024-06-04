@@ -14,12 +14,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import ShortUniqueId from 'short-unique-id';
 
 type Inputs = {
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
   CompanyName: string;
   CompanyTel: number;
   CompanyAddress: string;
+  ClientNo: number;
+  ClientEmail: string;
+  ClientName: string;
   InvoiceDate: string;
   PoNumber: string;
   DCNo: number;
@@ -108,38 +108,6 @@ const Page = () => {
               </CardDescription>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>Client Mobile #</Label>
-                  <Input
-                    type='number'
-                    placeholder='Enter Client Mobile Number'
-                    {...register('ClientNo', { required: true })}
-                  />
-                  {errors.ClientNo && <p className="error">Client Mobile # is required</p>}
-                </div>
-                <div className='flex flex-col items-start justify-between'>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    type="email"
-                    placeholder='Enter Client Email'
-                    {...register('ClientEmail', {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                        message: "Invalid email address"
-                      }
-                    })} />
-                  {errors.ClientEmail && <p className="error">{errors.ClientEmail.message}</p>}
-                </div>
-                <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>Client Name</Label>
-                  <Input
-                    type='text'
-                    placeholder='Enter Client Name'
-                    {...register('ClientName', { required: true })}
-                  />
-                  {errors.ClientName && <p className="error">Client Name is required</p>}
-                </div>
-                <div className='flex flex-col items-start justify-between'>
                   <Label className='mb-2'>Company Name</Label>
                   <Input
                     type='text'
@@ -165,6 +133,35 @@ const Page = () => {
                     {...register('CompanyAddress', { required: true })}
                   />
                   {errors.CompanyAddress && <p className="error">Company Address is required</p>}
+                </div>
+                
+                <div className='flex flex-col items-start justify-between'>
+                  <Label className='mb-2'>Client Mobile #</Label>
+                  <Input
+                    type='number'
+                    placeholder='Enter Client Mobile Number'
+                    {...register('ClientNo')}
+                  />
+                </div>
+                <div className='flex flex-col items-start justify-between'>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    type="email"
+                    placeholder='Enter Client Email'
+                    {...register('ClientEmail', {
+                      pattern: {
+                        value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                        message: "Invalid email address"
+                      }
+                    })} />
+                </div>
+                <div className='flex flex-col items-start justify-between'>
+                  <Label className='mb-2'>Client Name</Label>
+                  <Input
+                    type='text'
+                    placeholder='Enter Client Name'
+                    {...register('ClientName')}
+                  />
                 </div>
               </div>
             </CardContent>
