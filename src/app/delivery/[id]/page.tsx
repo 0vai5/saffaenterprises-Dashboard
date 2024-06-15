@@ -181,6 +181,7 @@ const Page = ({ params }: any) => {
                         </CardContent>
                         <CardFooter className='flex justify-between items-end md:items-center px-5 sm:flex-row flex-col-reverse  gap-[4rem]'>
                             <div className='flex justify-end items-end flex-col gap-2'>
+                            <CardDescription>• All the above Items are recieved in good condition.</CardDescription>
                                 <Separator className='font-bold' />
                                 <p className='font-semibold'>Reciever</p>
                             </div>
