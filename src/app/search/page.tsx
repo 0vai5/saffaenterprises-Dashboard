@@ -45,9 +45,9 @@ type Challan = {
   ClientNo: number;
   ClientEmail: string;
   ClientName: string;
-  OrganizationName: string;
-  OrganizationTel: number;
-  OrganizationAddress: string;
+  CompanyName: string;
+  CompanyTel: number;
+  CompanyAddress: string;
   InvoiceDate: string;
   PoNumber: string;
   DCDate: string;
@@ -181,7 +181,7 @@ const Search = () => {
                           <TableCell>
                             <Link href={`/invoice/${challan._id}`}>
                               <div className='font-medium'>
-                                <p>{challan.OrganizationName}</p>
+                                <p>{challan.CompanyName}</p>
                                 <p>{challan.ClientEmail}</p>
                               </div>
                             </Link>
