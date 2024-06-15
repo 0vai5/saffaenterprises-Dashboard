@@ -1,6 +1,6 @@
 import Connect from '@/DBConfig/DBConfig';
 import { NextRequest, NextResponse } from 'next/server';
-import Invoice from '@/models/invoice.model';
+import Challan from '@/models/challan.model';
 
 // Ensure the database connection is established
 Connect();
@@ -10,26 +10,26 @@ export async function POST(request: NextRequest) {
         const reqBody = await request.json();
         const { id } = reqBody;
 
-        // Fetch the invoice by id
-        const invoice = await Invoice.findById(id);
+        // Fetch the challan by id
+        const challan = await Challan.findById(id);
 
-        // Check if invoice is found
-        if (!invoice) {
+        // Check if challan is found
+        if (!challan) {
             return NextResponse.json({
-                message: "Invoice not found",
+                message: "challan not found",
                 status: 404
             });
         }
 
         return NextResponse.json({
-            message: 'Fetched Invoice successfully',
-            data: invoice,
+            message: 'Fetched challan successfully',
+            data: challan,
             status: 200
         });
     } catch (error) {
-        console.error('Error fetching invoice:', error);
+        console.error('Error fetching Challan:', error);
         return NextResponse.json({
-            message: 'Failed to fetch Invoice',
+            message: 'Failed to fetch Challan',
             error: error || 'Unknown error',
             status: 500
         });

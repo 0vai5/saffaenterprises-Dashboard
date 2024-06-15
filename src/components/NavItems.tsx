@@ -34,13 +34,13 @@ const NavItems = () => {
         </Link>
       </li>
       <li>
-        <Link href="/createInvoice">
-          <h4 className="text-xl font-semibold">Create Invoice</h4>
+        <Link href="/create">
+          <h4 className="text-xl font-semibold">Create</h4>
         </Link>
       </li>
       <li>
         <Link href="/search">
-          <h4 className="text-xl font-semibold">Invoice Search</h4>
+          <h4 className="text-xl font-semibold">Search</h4>
         </Link>
       </li>
       <li>

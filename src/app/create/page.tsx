@@ -20,10 +20,10 @@ type Inputs = {
   ClientNo: number;
   ClientEmail: string;
   ClientName: string;
-  InvoiceDate: string;
+  deliveryDate: string;
   PoNumber: string;
-  DCNo: number;
   DCDate: string;
+  InvoiceDate: string
 }
 
 type Products = {
@@ -51,17 +51,23 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const grandTotal = calculateGrandTotal();
-    const invoice = {invoiceID: uid.rnd(10), ...data, products, grandTotal };
+    const challan = {
+      invoiceID: uid.rnd(10),
+      DCNo: uid.rnd(5),
+       ...data,
+        products,
+        grandTotal 
+      };
 
     try {
-      const response = await fetch('/api/invoice/createInvoice', {
+      const response = await fetch('/api/challan/createChallan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(invoice)
+        body: JSON.stringify(challan)
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create Invoice');
+        throw new Error('Failed to create Challan');
       }
 
       const result = await response.json();
@@ -69,7 +75,7 @@ const Page = () => {
       reset();
       setProducts([]);
     } catch (error: any) {
-      console.log('There was an Error While Creating an Invoice: ', error);
+      console.log('There was an Error While Creating an Challan: ', error);
       toast.error(error.message);
     }
   };
@@ -169,22 +175,13 @@ const Page = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Invoice Information</CardTitle>
+              <CardTitle>delivery Information</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className='mb-3'>
-                Important Information about the Invoice and Delivery
+                Important Information about the delivery and Delivery
               </CardDescription>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>DC No. #</Label>
-                  <Input
-                    type='number'
-                    placeholder='Enter Delivery Number'
-                    {...register('DCNo', { required: true })}
-                  />
-                  {errors.DCNo && <p className="error">DC No. # is required</p>}
-                </div>
                 <div className='flex flex-col items-start justify-between'>
                   <Label className='mb-2'>DC Date</Label>
                   <Input type='date'
@@ -193,11 +190,11 @@ const Page = () => {
                   {errors.DCDate && <p className="error">DC Date is required</p>}
                 </div>
                 <div className='flex flex-col items-start justify-between'>
-                  <Label className='mb-2'>Invoice Date</Label>
+                  <Label className='mb-2'>InvoiceDate</Label>
                   <Input type='date'
                     {...register('InvoiceDate', { required: true })}
                   />
-                  {errors.InvoiceDate && <p className="error">Invoice Date is required</p>}
+                  {errors.InvoiceDate && <p className="error">Date is required</p>}
                 </div>
                 <div className='flex flex-col items-start justify-between'>
                   <Label className='mb-2'>PO. No.</Label>
@@ -284,7 +281,7 @@ const Page = () => {
             </CardFooter>
           </Card>
 
-          <Button variant={'secondary'} type="submit">Create Invoice</Button>
+          <Button variant={'secondary'} type="submit">Create Challan</Button>
         </form>
       </section>
     </>

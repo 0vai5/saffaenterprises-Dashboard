@@ -38,8 +38,9 @@ type Inputs = {
   searchQuery: string;
 };
 
-type Invoice = {
+type Challan = {
   _id: string;
+  DCNo: string;
   invoiceId: string;
   ClientNo: number;
   ClientEmail: string;
@@ -49,7 +50,6 @@ type Invoice = {
   OrganizationAddress: string;
   InvoiceDate: string;
   PoNumber: string;
-  DCNo: number;
   DCDate: string;
   products: {
     description: string;
@@ -61,7 +61,7 @@ type Invoice = {
 };
 
 const Search = () => {
-  const [data, setData] = useState<Invoice[]>([]);
+  const [data, setData] = useState<Challan[]>([]);
   const [error, setError] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
@@ -69,7 +69,7 @@ const Search = () => {
   const onSubmit: SubmitHandler<Inputs> = async (FormData) => {
     setError(null); // Reset error state
     try {
-      const response = await fetch('/api/invoice/searchInvoices', {
+      const response = await fetch('/api/challan/searchChallans', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const Search = () => {
 
   const deleteInvoice = async (_id: string) => {
     try {
-      const response = await fetch('/api/invoice/deleteInvoice', {
+      const response = await fetch('/api/challan/deleteChallan', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,13 +101,13 @@ const Search = () => {
       });
 
       if (response.ok) {
-        setData((prevInvoice) => prevInvoice.filter(invoice => invoice._id !== _id));
-        console.log(`Invoice with ID ${_id} deleted successfully.`);
+        setData((prevChallan) => prevChallan.filter(challan => challan._id !== _id));
+        console.log(`Challan with ID ${_id} deleted successfully.`);
       } else {
-        console.log(`Failed to delete invoice with ID ${_id}: ${response.statusText}`);
+        console.log(`Failed to delete Challan with ID ${_id}: ${response.statusText}`);
       }
     } catch (error) {
-      console.log(`Failed to delete invoice with ID ${_id}`, error);
+      console.log(`Failed to delete Challan with ID ${_id}`, error);
     }
   };
 
@@ -122,7 +122,7 @@ const Search = () => {
         <Card className='mb-4'>
           <CardHeader>
             <CardTitle>Search</CardTitle>
-            <CardDescription>Search for Invoices</CardDescription>
+            <CardDescription>Search for Challans</CardDescription>
           </CardHeader>
           <CardContent>
             <form className='flex flex-col md:flex-row justify-between gap-10 items-center mb-5' onSubmit={handleSubmit(onSubmit)}>
@@ -144,7 +144,7 @@ const Search = () => {
           </CardContent>
         </Card>
         <div className='flex items-center justify-between '>
-          <h1 className='subhead-text mb-5'>Invoice History</h1>
+          <h1 className='subhead-text mb-5'>Challan History</h1>
           <div className='ml-auto flex items-center gap-2'>
             <ReactToPrint
               trigger={() => (
@@ -160,8 +160,8 @@ const Search = () => {
         <div ref={cardRef}>
           <Card>
             <CardHeader className='px-7'>
-              <CardTitle>Orders</CardTitle>
-              <CardDescription>Recent orders from your store.</CardDescription>
+              <CardTitle>Challans</CardTitle>
+              <CardDescription>Recent Challans registered.</CardDescription>
             </CardHeader>
             <CardContent>
               <div>
@@ -176,24 +176,24 @@ const Search = () => {
                   </TableHeader>
                   <TableBody>
                     {data && data.length > 0 ? (
-                      data.map((invoice, index) => (
+                      data.map((challan, index) => (
                         <TableRow key={index} className='bg-accent'>
                           <TableCell>
-                            <Link href={`/invoice/${invoice._id}`}>
+                            <Link href={`/invoice/${challan._id}`}>
                               <div className='font-medium'>
-                                <p>{invoice.OrganizationName}</p>
-                                <p>{invoice.ClientEmail}</p>
+                                <p>{challan.OrganizationName}</p>
+                                <p>{challan.ClientEmail}</p>
                               </div>
                             </Link>
                           </TableCell>
                           <TableCell className='hidden md:table-cell'>
-                            <Link href={`/invoice/${invoice._id}`}>
-                              {invoice.InvoiceDate}
+                            <Link href={`/invoice/${challan._id}`}>
+                              {challan.InvoiceDate}
                             </Link>
                           </TableCell>
                           <TableCell className='text-right'>
-                            <Link href={`/invoice/${invoice._id}`}>
-                              Rs. {invoice.grandTotal.toFixed(2)}
+                            <Link href={`/invoice/${challan._id}`}>
+                              Rs. {challan.grandTotal.toFixed(2)}
                             </Link>
                           </TableCell>
                           <TableCell className='text-right'>
@@ -209,16 +209,24 @@ const Search = () => {
                                   <DropdownMenuLabel>More</DropdownMenuLabel>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem>
-                                    <Button size='sm' variant='destructive' className='h-7 gap-1 text-sm' onClick={() => deleteInvoice(invoice._id)}>
+                                    <Button size='sm' variant='destructive' className='h-7 gap-1 text-sm' onClick={() => deleteInvoice(challan._id)}>
                                       <Trash className='h-3.5 w-3.5' />
                                       <span className='not-sr-only'>Delete</span>
                                     </Button>
                                   </DropdownMenuItem>
                                   <DropdownMenuItem>
-                                    <Link href={'/invoice/' + invoice._id}>
+                                    <Link href={'/invoice/' + challan._id}>
                                       <Button size='sm' variant='outline' className='h-7 gap-1 text-sm'>
                                         <Eye className='h-3.5 w-3.5' />
-                                        <span className='not-sr-only'>View</span>
+                                        <span className='not-sr-only'>View Invoice</span>
+                                      </Button>
+                                    </Link>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Link href={'/delivery/' + challan._id}>
+                                      <Button size='sm' variant='outline' className='h-7 gap-1 text-sm'>
+                                        <Eye className='h-3.5 w-3.5' />
+                                        <span className='not-sr-only'>View DC</span>
                                       </Button>
                                     </Link>
                                   </DropdownMenuItem>

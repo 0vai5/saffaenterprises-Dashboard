@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface Invoice extends Document {
+export interface Challan extends Document {
     invoiceID: string
+    DCNo: string;
     ClientNo: number;
     ClientEmail: string;
     ClientName: string;
@@ -10,7 +11,6 @@ export interface Invoice extends Document {
     CompanyAddress: string;
     InvoiceDate: string;
     PoNumber: string
-    DCNo: number;
     DCDate: string;
     products: Array<{
         description: string,
@@ -21,10 +21,9 @@ export interface Invoice extends Document {
     grandTotal: number
 }
 
-const InvoiceSchema: Schema<Invoice> = new Schema({
-    invoiceID: {
-        type: String,
-    },
+const ChallanSchema: Schema<Challan> = new Schema({
+    invoiceID: { type: String },
+    DCNo: { type: String },
     CompanyName: { type: String, required: true },
     CompanyTel: { type: Number, required: true },
     CompanyAddress: { type: String, required: true },
@@ -33,7 +32,6 @@ const InvoiceSchema: Schema<Invoice> = new Schema({
     ClientName: { type: String },
     InvoiceDate: { type: String, required: true },
     PoNumber: { type: String, required: true },
-    DCNo: { type: Number, required: true },
     DCDate: { type: String, required: true },
     products: [
         {
@@ -46,5 +44,5 @@ const InvoiceSchema: Schema<Invoice> = new Schema({
     grandTotal: { type: Number, required: true }
 })
 
-const InvoiceModel = (mongoose.models.Invoice as mongoose.Model<Invoice>) || mongoose.model<Invoice>("Invoice", InvoiceSchema)
-export default InvoiceModel;
+const ChallanModel = (mongoose.models.Challan as mongoose.Model<Challan>) || mongoose.model<Challan>("Challan", ChallanSchema)
+export default ChallanModel;

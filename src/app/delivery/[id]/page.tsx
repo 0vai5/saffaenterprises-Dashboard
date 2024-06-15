@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowDownToLine, Printer } from 'lucide-react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -126,7 +126,8 @@ const Page = ({ params }: any) => {
                             </div>
                         </CardHeader>
                         <CardContent className='mb-2 container'>
-                            <CardTitle className='mb-3'>Invoice# <span className='font-light'>{challan.invoiceID}</span></CardTitle>
+                            <h1 className='font-semibold text-xl text-center underline'><u>Delivery Challan</u></h1>
+                            <CardTitle className='mb-3'>Challan# <span className='font-light'>{challan.DCNo}</span></CardTitle>
                             <div className='flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0'>
                                 <div className="flex flex-col">
                                     <h1 className='text-base font-bold'>Billed To:</h1>
@@ -137,7 +138,7 @@ const Page = ({ params }: any) => {
                                     <p><span className='font-semibold'>P.O. No#: </span> {challan.PoNumber}</p>
                                     <p><span className='font-semibold'>InvoiceDate:</span> {challan.InvoiceDate}</p>
                                     <p><span className='font-semibold'>DCDate:</span> {challan.DCDate}</p>
-                                    <p><span className='font-semibold'>DCNo:</span> {challan.DCNo}</p>
+                                    <p><span className='font-semibold'>InvoiceNo:</span> {challan.invoiceID}</p>
                                 </div>
                             </div>
 
