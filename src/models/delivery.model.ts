@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface Challan extends Document {
-    invoiceID: string
+export interface Delivery extends Document {
     DCNo: string;
     ClientNo: number;
     ClientEmail: string;
@@ -13,16 +12,11 @@ export interface Challan extends Document {
     PoNumber: string
     DCDate: string;
     products: Array<{
-        description: string,
-        unit: number,
-        unitPrice: number,
-        total: number
+        description: string
     }>;
-    grandTotal: number
 }
 
-const ChallanSchema: Schema<Challan> = new Schema({
-    invoiceID: { type: String },
+const DeliverySchema: Schema<Delivery> = new Schema({
     DCNo: { type: String },
     CompanyName: { type: String, required: true },
     CompanyTel: { type: Number, required: true },
@@ -35,14 +29,10 @@ const ChallanSchema: Schema<Challan> = new Schema({
     DCDate: { type: String, required: true },
     products: [
         {
-            description: { type: String, required: true },
-            unit: { type: Number, required: true },
-            unitPrice: { type: Number, required: true },
-            total: { type: Number, required: true }
+            description: { type: String, required: true }
         }
-    ],
-    grandTotal: { type: Number, required: true }
+    ]
 })
 
-const ChallanModel = (mongoose.models.Challan as mongoose.Model<Challan>) || mongoose.model<Challan>("Challan", ChallanSchema)
-export default ChallanModel;
+const DeliveryModel = (mongoose.models.Delivery as mongoose.Model<Delivery>) || mongoose.model<Delivery>("Delivery", DeliverySchema)
+export default DeliveryModel;

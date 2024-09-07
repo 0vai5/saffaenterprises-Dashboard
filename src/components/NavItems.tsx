@@ -34,8 +34,13 @@ const NavItems = () => {
         </Link>
       </li>
       <li>
-        <Link href="/create">
-          <h4 className="text-xl font-semibold">Create</h4>
+        <Link href="/create-bill">
+          <h4 className="text-xl font-semibold">Create Bill</h4>
+        </Link>
+      </li>
+      <li>
+        <Link href="/create-delivery">
+          <h4 className="text-xl font-semibold">Create Delivery</h4>
         </Link>
       </li>
       <li>

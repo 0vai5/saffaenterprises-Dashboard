@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -23,7 +23,8 @@ type Inputs = {
   deliveryDate: string;
   PoNumber: string;
   DCDate: string;
-  InvoiceDate: string
+  InvoiceDate: string;
+  DCNo: string;
 }
 
 type Products = {
@@ -51,23 +52,22 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const grandTotal = calculateGrandTotal();
-    const challan = {
+    const bill = {
       invoiceID: uid.rnd(10),
-      DCNo: uid.rnd(5),
        ...data,
         products,
         grandTotal 
       };
 
     try {
-      const response = await fetch('/api/challan/createChallan', {
+      const response = await fetch('/api/bill/createBill', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(challan)
+        body: JSON.stringify(bill)
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create Challan');
+        throw new Error('Failed to create bill');
       }
 
       const result = await response.json();
@@ -75,7 +75,7 @@ const Page = () => {
       reset();
       setProducts([]);
     } catch (error: any) {
-      console.log('There was an Error While Creating an Challan: ', error);
+      console.log('There was an Error While Creating an bill: ', error);
       toast.error(error.message);
     }
   };
@@ -203,6 +203,13 @@ const Page = () => {
                   />
                   {errors.PoNumber && <p className="error">PO. No. is required</p>}
                 </div>
+                <div className='flex flex-col items-start justify-between'>
+                  <Label className='mb-2'>DC No.</Label>
+                  <Input type='text'
+                    {...register('DCNo', { required: true })}
+                  />
+                  {errors.DCNo && <p className="error">DC No. is required</p>}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -281,7 +288,7 @@ const Page = () => {
             </CardFooter>
           </Card>
 
-          <Button variant={'secondary'} type="submit">Create Challan</Button>
+          <Button variant={'secondary'} type="submit">Create Bill</Button>
         </form>
       </section>
     </>

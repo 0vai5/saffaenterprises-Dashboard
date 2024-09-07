@@ -1,6 +1,6 @@
 import Connect from '@/DBConfig/DBConfig';
 import { NextRequest, NextResponse } from 'next/server';
-import Challan from '@/models/challan.model';
+import Bill from '@/models/bill.model';
 
 // Ensure the database connection is established
 Connect();
@@ -11,10 +11,10 @@ export async function POST(request: NextRequest) {
         const { id } = reqBody;
 
         // Fetch the challan by id
-        const challan = await Challan.findById(id);
+        const bill = await Bill.findById(id);
 
         // Check if challan is found
-        if (!challan) {
+        if (!bill) {
             return NextResponse.json({
                 message: "challan not found",
                 status: 404
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
             message: 'Fetched challan successfully',
-            data: challan,
+            data: bill,
             status: 200
         });
     } catch (error) {

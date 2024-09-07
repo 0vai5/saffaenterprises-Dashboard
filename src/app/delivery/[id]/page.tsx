@@ -18,8 +18,7 @@ import ReactToPrint from 'react-to-print';
 import Link from 'next/link';
 
 
-type Challan = {
-    invoiceID: string
+type Delivery = {
     DCNo: string;
     _id: string;
     ClientNo: number;
@@ -33,20 +32,16 @@ type Challan = {
     DCDate: string;
     products: {
         description: string;
-        unit: number;
-        unitPrice: number;
-        total: number;
     }[];
-    grandTotal: number;
 };
 
 const Page = ({ params }: any) => {
-    const [challan, setChallan] = useState<Challan | null>(null);
+    const [delivery, setDelivery] = useState<Delivery | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
 
-    const fetchChallanById = async () => {
+    const fetchDeliveryById = async () => {
         try {
-            const response = await fetch('/api/challan/findChallan', {
+            const response = await fetch('/api/delivery/findDelivery', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,20 +50,20 @@ const Page = ({ params }: any) => {
             });
 
             if (!response.ok) {
-                throw new Error('Error Occurred while Fetching Invoice');
+                throw new Error('Error Occurred while Fetching Delivery');
             }
             const result = await response.json();
-            setChallan(result.data);
+            setDelivery(result.data);
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        fetchChallanById();
+        fetchDeliveryById();
     }, [params.id]);
 
-    if (!challan) {
+    if (!delivery) {
         return <div>Loading...</div>;
     }
 
@@ -127,18 +122,17 @@ const Page = ({ params }: any) => {
                         </CardHeader>
                         <CardContent className='mb-2 container'>
                             <h1 className='font-semibold text-xl text-center underline'><u>Delivery Challan</u></h1>
-                            <CardTitle className='mb-3'>Challan# <span className='font-light'>{challan.DCNo}</span></CardTitle>
+                            <CardTitle className='mb-3'>delivery# <span className='font-light'>{delivery.DCNo}</span></CardTitle>
                             <div className='flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0'>
                                 <div className="flex flex-col">
                                     <h1 className='text-base font-bold'>Billed To:</h1>
-                                    <p><span className='font-semibold'>Company Name:</span> {challan.CompanyName}</p>
-                                    <p><span className='font-semibold'>Company Address:</span> {challan.CompanyAddress}</p>
+                                    <p><span className='font-semibold'>Company Name:</span> {delivery.CompanyName}</p>
+                                    <p><span className='font-semibold'>Company Address:</span> {delivery.CompanyAddress}</p>
                                 </div>
                                 <div className="flex flex-col">
-                                    <p><span className='font-semibold'>P.O. No#: </span> {challan.PoNumber}</p>
-                                    <p><span className='font-semibold'>InvoiceDate:</span> {challan.InvoiceDate}</p>
-                                    <p><span className='font-semibold'>DCDate:</span> {challan.DCDate}</p>
-                                    <p><span className='font-semibold'>InvoiceNo:</span> {challan.invoiceID}</p>
+                                    <p><span className='font-semibold'>P.O. No#: </span> {delivery.PoNumber}</p>
+                                    <p><span className='font-semibold'>InvoiceDate:</span> {delivery.InvoiceDate}</p>
+                                    <p><span className='font-semibold'>DCDate:</span> {delivery.DCDate}</p>
                                 </div>
                             </div>
 
@@ -148,29 +142,13 @@ const Page = ({ params }: any) => {
                                         <TableHeader>
                                             <TableRow >
                                                 <TableHead>Description</TableHead>
-                                                <TableHead className="hidden sm:table-cell">
-                                                    Unit
-                                                </TableHead>
-                                                <TableHead className="hidden sm:table-cell">
-                                                    Unit Price
-                                                </TableHead>
-                                                <TableHead className="text-right">Amount</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {challan.products.map((product, index) => (
+                                            {delivery.products.map((product, index) => (
                                                 <TableRow key={index} className="bg-accent">
                                                     <TableCell>
                                                         <div className="font-medium">{product.description}</div>
-                                                    </TableCell>
-                                                    <TableCell className="hidden sm:table-cell">
-                                                        {product.unit}
-                                                    </TableCell>
-                                                    <TableCell className="hidden sm:table-cell">
-                                                        Rs. {product.unitPrice}
-                                                    </TableCell>
-                                                    <TableCell className="text-right">
-                                                        Rs. {product.unit * product.unitPrice}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -184,11 +162,6 @@ const Page = ({ params }: any) => {
                             <CardDescription>• All the above Items are recieved in good condition.</CardDescription>
                                 <Separator className='font-bold' />
                                 <p className='font-semibold'>Reciever</p>
-                            </div>
-                            <div className='flex justify-end items-end flex-col gap-2'>
-                                <p className='align-center'><span className='font-bold'>Total: </span>Rs. {challan.grandTotal}</p>
-                                <Separator />
-                                <p><span className='font-bold'>Grand Total: </span>Rs. {challan.grandTotal}</p>
                             </div>
                         </CardFooter>
                     </Card>

@@ -1,6 +1,6 @@
 import Connect from '@/DBConfig/DBConfig';
 import { NextRequest, NextResponse } from 'next/server';
-import Challan from '@/models/challan.model';
+import Delivery from '@/models/delivery.model';
 
 
 Connect();
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
        
 
-        const newChallan = new Challan({
+        const newDelivery = new Delivery({
             invoiceID,
             ClientNo,
             ClientEmail,
@@ -42,10 +42,10 @@ export async function POST(request: NextRequest) {
         });
 
         // Save the invoice to the database
-        await newChallan.save();
+        await newDelivery.save();
 
         // Return the created invoice
-        return NextResponse.json({ message: 'Challan created successfully', invoice: newChallan });
+        return NextResponse.json({ message: 'Delivery created successfully', delivery: newDelivery });
     } catch (error) {
         // Handle errors
         console.error(error);

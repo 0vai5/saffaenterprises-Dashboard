@@ -69,7 +69,7 @@ const Search = () => {
   const onSubmit: SubmitHandler<Inputs> = async (FormData) => {
     setError(null); // Reset error state
     try {
-      const response = await fetch('/api/challan/searchChallans', {
+      const response = await fetch('/api/delivery/searchDelivery', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -192,11 +192,6 @@ const Search = () => {
                             </Link>
                           </TableCell>
                           <TableCell className='text-right'>
-                            <Link href={`/invoice/${challan._id}`}>
-                              Rs. {challan.grandTotal.toFixed(2)}
-                            </Link>
-                          </TableCell>
-                          <TableCell className='text-right'>
                             <div className='ml-auto flex items-center justify-center gap-2'>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -213,14 +208,6 @@ const Search = () => {
                                       <Trash className='h-3.5 w-3.5' />
                                       <span className='not-sr-only'>Delete</span>
                                     </Button>
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Link href={'/invoice/' + challan._id}>
-                                      <Button size='sm' variant='outline' className='h-7 gap-1 text-sm'>
-                                        <Eye className='h-3.5 w-3.5' />
-                                        <span className='not-sr-only'>View Invoice</span>
-                                      </Button>
-                                    </Link>
                                   </DropdownMenuItem>
                                   <DropdownMenuItem>
                                     <Link href={'/delivery/' + challan._id}>

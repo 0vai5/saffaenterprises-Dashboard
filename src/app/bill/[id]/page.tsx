@@ -18,7 +18,7 @@ import ReactToPrint from 'react-to-print';
 import Link from 'next/link';
 
 
-type Challan = {
+type Bill = {
     invoiceID: string
     DCNo: string;
     _id: string;
@@ -41,12 +41,12 @@ type Challan = {
 };
 
 const Page = ({ params }: any) => {
-    const [challan, setChallan] = useState<Challan | null>(null);
+    const [bill, setBill] = useState<Bill | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
 
-    const fetchChallanById = async () => {
+    const fetchBillById = async () => {
         try {
-            const response = await fetch('/api/challan/findChallan', {
+            const response = await fetch('/api/bill/findBill', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -58,17 +58,17 @@ const Page = ({ params }: any) => {
                 throw new Error('Error Occurred while Fetching Invoice');
             }
             const result = await response.json();
-            setChallan(result.data);
+            setBill(result.data);
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        fetchChallanById();
+        fetchBillById();
     }, [params.id]);
 
-    if (!challan) {
+    if (!bill) {
         return <div>Loading...</div>;
     }
 
@@ -126,18 +126,18 @@ const Page = ({ params }: any) => {
                             </div>
                         </CardHeader>
                         <CardContent className='mb-2 container'>
-                            <CardTitle className='mb-3'>Invoice# <span className='font-light'>{challan.invoiceID}</span></CardTitle>
+                            <CardTitle className='mb-3'>Invoice# <span className='font-light'>{bill.invoiceID}</span></CardTitle>
                             <div className='flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0'>
                                 <div className="flex flex-col">
                                     <h1 className='text-base font-bold'>Billed To:</h1>
-                                    <p><span className='font-semibold'>Company Name:</span> {challan.CompanyName}</p>
-                                    <p><span className='font-semibold'>Company Address:</span> {challan.CompanyAddress}</p>
+                                    <p><span className='font-semibold'>Company Name:</span> {bill.CompanyName}</p>
+                                    <p><span className='font-semibold'>Company Address:</span> {bill.CompanyAddress}</p>
                                 </div>
                                 <div className="flex flex-col">
-                                    <p><span className='font-semibold'>P.O. No#: </span> {challan.PoNumber}</p>
-                                    <p><span className='font-semibold'>InvoiceDate:</span> {challan.InvoiceDate}</p>
-                                    <p><span className='font-semibold'>DCDate:</span> {challan.DCDate}</p>
-                                    <p><span className='font-semibold'>DCNo:</span> {challan.DCNo}</p>
+                                    <p><span className='font-semibold'>P.O. No#: </span> {bill.PoNumber}</p>
+                                    <p><span className='font-semibold'>InvoiceDate:</span> {bill.InvoiceDate}</p>
+                                    <p><span className='font-semibold'>DCDate:</span> {bill.DCDate}</p>
+                                    <p><span className='font-semibold'>DCNo:</span> {bill.DCNo}</p>
                                 </div>
                             </div>
 
@@ -157,7 +157,7 @@ const Page = ({ params }: any) => {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {challan.products.map((product, index) => (
+                                            {bill.products.map((product, index) => (
                                                 <TableRow key={index} className="bg-accent">
                                                     <TableCell>
                                                         <div className="font-medium">{product.description}</div>
@@ -184,9 +184,9 @@ const Page = ({ params }: any) => {
                                 <p className='font-semibold'>Waseem Haroon</p>
                             </div>
                             <div className='flex justify-end items-end flex-col gap-2'>
-                                <p className='align-center'><span className='font-bold'>Total: </span>Rs. {challan.grandTotal}</p>
+                                <p className='align-center'><span className='font-bold'>Total: </span>Rs. {bill.grandTotal}</p>
                                 <Separator />
-                                <p><span className='font-bold'>Grand Total: </span>Rs. {challan.grandTotal}</p>
+                                <p><span className='font-bold'>Grand Total: </span>Rs. {bill.grandTotal}</p>
                             </div>
                         </CardFooter>
                     </Card>
