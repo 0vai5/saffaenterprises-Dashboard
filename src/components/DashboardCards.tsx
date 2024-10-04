@@ -33,7 +33,7 @@ const DashboardCards = () => {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Link href="/create">
+          <Link href="/create-delivery">
             <Button>Create New Challan</Button>
           </Link>
         </CardFooter>
