@@ -1,28 +1,6 @@
-
-{GetUsers}:
-api/users/GetUsers
-
-
-{createInvoice}:
-api/invoices/createInvoice
-
-{SearchInvoice}:
-api/invoice/SearchInvoice
-
-{DeleteInvoice}:
-api/invoices/deleteInvoice
-
-
-
-
-
-
-{user}:
-api/users/user
-
-{UpdateInvoice}:
-api/invoices/updateInvoice
-
-{GetInvoice}:
-api/invoices/getInvoice
-
+Backend 
+toggle darkmode 
+add to cart wala
+add to cart aur saray messages bhi dekheinge 
+aur message p send email
+etc
