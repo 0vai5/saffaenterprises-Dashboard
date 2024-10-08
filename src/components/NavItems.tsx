@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import ThemeButton from "./ThemeButton";
 
 const NavItems = () => {
   const router = useRouter();
@@ -52,6 +53,9 @@ const NavItems = () => {
         <Link href="/users">
           <h4 className="text-xl font-semibold">Users</h4>
         </Link>
+      </li>
+      <li>
+        <ThemeButton />
       </li>
       <li>
         <Button

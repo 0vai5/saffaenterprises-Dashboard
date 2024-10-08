@@ -15,6 +15,18 @@ const Header = () => {
             alt="Company Logo"
             width={150}
             height={150}
+            className="cursor-pointer dark:hidden"
+          />
+        </Link>
+        <Link
+          href="/"
+        >
+          <Image
+            src={'/saffaenterprises-dark.png'}
+            alt="Company Logo"
+            width={150}
+            height={150}
+            className="cursor-pointer hidden dark:block"
           />
         </Link>
       </div>
