@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const nunito = Nunito({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
   title: "SaffaEnterPrises Invoice Manager",
@@ -29,7 +29,7 @@ export default function RootLayout({
       </head>
       <Analytics />
       <SpeedInsights />
-      <body className={`${inter.className} dark:bg-[#09090B]`}>
+      <body className={`${nunito.className} dark:bg-[#09090B]`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
