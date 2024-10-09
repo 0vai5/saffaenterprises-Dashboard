@@ -41,19 +41,21 @@ const Page = () => {
         },
         body: JSON.stringify(data),
       });
-
+  
       if (!response.ok) {
-        console.log("Can't find user");
+        throw new Error("User not found");
       }
-
+  
       const result = await response.json();
-      router.push("/");
+      
+      router.refresh();
       toast.success(result.message);
     } catch (error: any) {
       console.log("Error in Logging in: ", error);
-      toast.error(error);
+      toast.error(error.message);
     }
   };
+  
 
   return (
     <>
