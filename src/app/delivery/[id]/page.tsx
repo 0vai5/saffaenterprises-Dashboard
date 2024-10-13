@@ -103,7 +103,7 @@ const Page = ({ params }: any) => {
                     />
                 </div>
                 <div ref={cardRef}>
-                    <Card >
+                    <Card className='dark:bg-transparent dark:border-[#27272A]'>
                         <CardHeader className='flex sm:flex-row flex-col justify-between sm:items-center items-start mb-[12rem] sm:mb-0 max-h-[20vh]'>
                             <Image
                                 src={'/saffaenterprises.png'}
@@ -136,7 +136,7 @@ const Page = ({ params }: any) => {
                                 </div>
                             </div>
 
-                            <Card className='border-black/50'>
+                            <Card className='border-black/50 dark:bg-transparent dark:border-[#27272A]'>
                                 <CardContent>
                                     <Table>
                                         <TableHeader>

@@ -41,13 +41,13 @@ const Page = () => {
         },
         body: JSON.stringify(data),
       });
-  
+
       if (!response.ok) {
         throw new Error("User not found");
       }
-  
+
       const result = await response.json();
-      
+
       router.refresh();
       toast.success(result.message);
     } catch (error: any) {
@@ -55,7 +55,6 @@ const Page = () => {
       toast.error(error.message);
     }
   };
-  
 
   return (
     <>

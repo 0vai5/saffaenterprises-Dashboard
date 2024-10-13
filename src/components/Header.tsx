@@ -1,6 +1,7 @@
 import Link from "next/link";
 import NavItems from "./NavItems";
 import MobileNav from "./MobileNav";
+import UserDropdown from "./UserDropdown";
 import Image from "next/image";
 
 const Header = () => {
@@ -29,7 +30,10 @@ const Header = () => {
       <nav className="hidden md:block">
         <NavItems />
       </nav>
+      <div className="flex justify-center flex-row-reverse items-center gap-3">
       <MobileNav />
+      <UserDropdown />
+      </div>
     </header>
   );
 };

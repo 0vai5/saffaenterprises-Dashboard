@@ -12,11 +12,12 @@ export default function ThemeButton() {
   return (
     <Button
       variant="ghost"
-      size="icon"
+      size="lg"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
       <SunIcon className="h-[1.5rem] w-[1.3rem] dark:hidden" />
       <MoonIcon className="hidden h-5 w-5 dark:block" />
+      <p className="text-lg ml-2">{theme}</p>
       <span className="sr-only">Toggle theme</span>
     </Button>
   )

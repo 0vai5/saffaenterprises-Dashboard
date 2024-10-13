@@ -93,7 +93,7 @@ const Page = () => {
       <Toaster position="top-right" reverseOrder={false} />
       <section className='max-container'>
         <form className='flex flex-col justify-between gap-4' onSubmit={handleSubmit(onSubmit)}>
-          <Card>
+          <Card className='dark:bg-transparent dark:border-[#27272A]'>
             <CardHeader>
               <CardTitle>Client Information</CardTitle>
             </CardHeader>
@@ -162,7 +162,7 @@ const Page = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className='dark:bg-transparent dark:border-[#27272A]'>
             <CardHeader>
               <CardTitle>delivery Information</CardTitle>
             </CardHeader>
@@ -196,7 +196,7 @@ const Page = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className='dark:bg-transparent dark:border-[#27272A]'>
             <CardHeader className="px-7">
               <CardTitle>Products Information</CardTitle>
               <CardDescription>Products Purchased by the Client</CardDescription>
