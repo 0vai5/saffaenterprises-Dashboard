@@ -25,7 +25,6 @@ import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
-import ShortUniqueId from "short-unique-id";
 
 type Inputs = {
   CompanyName: string;
@@ -51,7 +50,6 @@ type Products = {
 const Page = () => {
   const router = useRouter();
   const [products, setProducts] = useState<Products[]>([]);
-  const uid = new ShortUniqueId();
 
   const handleRowAddition = () => {
     setProducts((prevProducts) => [
@@ -70,7 +68,6 @@ const Page = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const grandTotal = calculateGrandTotal();
     const bill = {
-      invoiceID: uid.rnd(10),
       ...data,
       products,
       grandTotal,
