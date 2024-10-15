@@ -20,8 +20,8 @@ const NavItems = () => {
             <h4 className="text-xl font-semibold">Dashboard</h4>
           </Link>
         </li>
-        <NavigationMenu className="bg-transparent">
-          <NavigationMenuList>
+        <NavigationMenu>
+          <NavigationMenuList className="bg-transparent">
             <NavigationMenuItem>
               <NavigationMenuTrigger className="text-xl font-semibold">
                 Create

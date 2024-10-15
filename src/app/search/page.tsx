@@ -134,13 +134,13 @@ const Search = () => {
               className="flex flex-col md:flex-row justify-between gap-10 items-center mb-5"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <div className="flex justify-start flex-col items-start">
+              <div className="flex justify-start flex-col items-start w-full">
                 <Label>Search</Label>
                 <Input
                   type="text"
                   {...register("searchQuery", { required: true })}
                   placeholder="Search by Invoice ID, Organisation, Client, etc."
-                  className="border rounded-lg border-slate-400 px-3 py-1"
+                  className="border rounded-lg border-slate-400 px-3 py-1 w-full"
                 />
                 {errors.searchQuery && (
                   <p className="error">Search query is required</p>
@@ -155,23 +155,8 @@ const Search = () => {
         </Card>
         <div className="flex items-center justify-between ">
           <h1 className="subhead-text mb-5">Challan History</h1>
-          <div className="ml-auto flex items-center gap-2">
-            <ReactToPrint
-              trigger={() => (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-7 gap-1 text-sm"
-                >
-                  <File className="h-3.5 w-3.5" />
-                  <span className="not-sr-only">Export</span>
-                </Button>
-              )}
-              content={() => cardRef.current}
-            />
-          </div>
         </div>
-        <div ref={cardRef}>
+        <div>
           <Card className="dark:bg-transparent dark:border-[#27272A]">
             <CardHeader className="px-7">
               <CardTitle>Challans</CardTitle>
@@ -186,7 +171,6 @@ const Search = () => {
                       <TableHead className="hidden md:table-cell">
                         Invoice Date
                       </TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -237,6 +221,19 @@ const Search = () => {
                                     </Button>
                                   </DropdownMenuItem>
                                   <DropdownMenuItem>
+                                    <Link href={"/delivery/" + challan._id}>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-7 gap-1 text-sm"
+                                      >
+                                        <Eye className="h-3.5 w-3.5" />
+                                        <span className="not-sr-only">
+                                          View DC
+                                        </span>
+                                      </Button>
+                                    </Link>
+                                    {/* The Dropdown button will have a Link /bill */}
                                     <Link href={"/delivery/" + challan._id}>
                                       <Button
                                         size="sm"

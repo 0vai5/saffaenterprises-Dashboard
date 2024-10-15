@@ -46,8 +46,8 @@ export default function UserDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src="/user.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src="/user.png" className="cursor-pointer" />
+          <AvatarFallback className="cursor-pointer">CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -56,7 +56,7 @@ export default function UserDropdown() {
         <div className="">
           <ThemeButton />
         </div>
-        <div className='p-3'>
+        <div className="p-3">
           <Button
             size="sm"
             variant="outline"
