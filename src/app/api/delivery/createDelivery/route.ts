@@ -8,37 +8,31 @@ Connect();
 export async function POST(request: NextRequest) {
     try {
         const {
-            invoiceID,
-            DCNo,
             ClientNo,
             ClientEmail,
             ClientName,
             CompanyName,
             CompanyTel,
             CompanyAddress,
-            InvoiceDate,
             PoNumber,
             DCDate,
             products,
-            grandTotal
         } = await request.json();
 
-       
+        const lastDelivery = await Delivery.findOne().sort({ SerialNo: -1 });
+        const newSerialNumber = lastDelivery ? lastDelivery.SerialNo + 1 : 1;
 
         const newDelivery = new Delivery({
-            invoiceID,
+            SerialNo: newSerialNumber,
             ClientNo,
             ClientEmail,
             ClientName,
             CompanyName,
             CompanyTel,
             CompanyAddress,
-            InvoiceDate,
             PoNumber,
-            DCNo,
             DCDate,
             products,
-            grandTotal
         });
 
         // Save the invoice to the database

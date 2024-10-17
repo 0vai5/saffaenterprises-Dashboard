@@ -1,8 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface Bill extends Document {
-    invoiceID: string
-    DCNo: string;
+    SerialNo: string;
     ClientNo: number;
     ClientEmail: string;
     ClientName: string;
@@ -18,12 +17,12 @@ export interface Bill extends Document {
         unitPrice: number,
         total: number
     }>;
-    grandTotal: number
+    grandTotal: number;
+    DeliveryRef?: mongoose.Schema.Types.ObjectId; 
 }
 
 const BillSchema: Schema<Bill> = new Schema({
-    invoiceID: { type: String },
-    DCNo: { type: String, required: true },
+    SerialNo: { type: String, required: true },
     CompanyName: { type: String, required: true },
     CompanyTel: { type: Number, required: true },
     CompanyAddress: { type: String, required: true },
@@ -41,8 +40,9 @@ const BillSchema: Schema<Bill> = new Schema({
             total: { type: Number, required: true }
         }
     ],
-    grandTotal: { type: Number, required: true }
-})
+    grandTotal: { type: Number, required: true },
+    DeliveryRef: { type: mongoose.Schema.Types.ObjectId, ref: 'Delivery' } 
+});
 
-const BillModel = (mongoose.models.Bill as mongoose.Model<Bill>) || mongoose.model<Bill>("Bill", BillSchema)
+const BillModel = (mongoose.models.Bill as mongoose.Model<Bill>) || mongoose.model<Bill>("Bill", BillSchema);
 export default BillModel;
