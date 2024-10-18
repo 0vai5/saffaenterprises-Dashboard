@@ -22,40 +22,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
-
-type Inputs = {
-  CompanyName: string;
-  CompanyTel: number;
-  CompanyAddress: string;
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
-  deliveryDate: string;
-  PoNumber: string;
-  DCDate: string;
-};
-type Company = {
-  _id?: string
-  CompanyName?: string;
-  CompanyTel?: number;
-  CompanyAddress?: string;
-  ClientNo?: number;
-  ClientEmail?: string;
-  ClientName?: string;
-};
-
-type Products = {
-  description: string;
-};
+import { Company, DeliveryInputs, DeliveryProducts } from "@/types/types";
 
 const Page = () => {
-  const router = useRouter();
-  // const [company, setCompany] = useState<Company | null>(null);
-  const [company, setCompany] = useState<Company>({}); 
-  const [products, setProducts] = useState<Products[]>([]);
+  const [company, setCompany] = useState<Company | null>(null);
+  const [products, setProducts] = useState<DeliveryProducts[]>([]);
 
   const handleRowAddition = () => {
     setProducts((prevProducts) => [...prevProducts, { description: "" }]);
@@ -67,73 +40,69 @@ const Page = () => {
     reset,
     watch,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<DeliveryInputs>();
 
-  const fetchCompany = async (companyName: string) => {
+  const fetchCompany = async (CompanyName: string) => {
     try {
-        const response = await fetch(`/api/company/findCompany/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ companyName }),
-        });
+      const response = await fetch(`/api/company/findCompany/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ CompanyName }),
+      });
 
-        const result = await response.json();
+      const result = await response.json();
 
-        if (!response.ok) {
-            // If no company is found, set company to null and return
-            setCompany({});
-            console.log("No company found, setting company to null.");
-            return;
-        }
+      if (!response.ok) {
+        setCompany({});
+        console.log("No company found, setting company to null.");
+        return;
+      }
 
-       
-       
-        setCompany(result.company);
-        console.log("Company Found: ", company);
-        toast.success(result.message);
+      setCompany(result.company);
+      console.log("Company Found: ", company);
+      toast.success(result.message);
     } catch (error) {
-        console.log("There was an Error While Fetching Company: ", error);
-        toast.error("There was an Error While Fetching Company");
+      console.log("There was an Error While Fetching Company: ", error);
+      toast.error("There was an Error While Fetching Company");
     }
-};
-
+  };
 
   const companyName = watch("CompanyName");
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>; 
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     if (companyName) {
       timeoutId = setTimeout(() => {
-        fetchCompany(companyName); 
+        fetchCompany(companyName);
       }, 1000);
     }
 
     return () => {
-      clearTimeout(timeoutId); 
+      clearTimeout(timeoutId);
     };
   }, [companyName]);
 
-  const createCompany = async (data: Inputs) => {
+  const createCompany = async (data: DeliveryInputs) => {
     try {
       const response = await fetch("/api/company/createCompany", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          companyName: data.CompanyName,  // Ensure case matches with backend
-          companyTel: data.CompanyTel,
-          companyAddress: data.CompanyAddress,
-          clientNo: data.ClientNo,
-          clientEmail: data.ClientEmail,
-          clientName: data.ClientName,
+          CompanyName: data.CompanyName, // Ensure case matches with backend
+          CompanyTel: data.CompanyTel,
+          CompanyAddress: data.CompanyAddress,
+          ClientNo: data.ClientNo,
+          ClientEmail: data.ClientEmail,
+          ClientName: data.ClientName,
         }),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         toast.success(result.message);
-        return result.company;  // Return the created company object
+        return result.company; // Return the created company object
       } else {
         throw new Error(result.message || "Error Creating Company");
       }
@@ -143,18 +112,21 @@ const Page = () => {
       return null;
     }
   };
-  
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<DeliveryInputs> = async (data) => {
     let companyData = company;
 
     if (!companyData) {
       let companyData = await createCompany(data);
     }
-
     const delivery = {
       ...data,
-      company: companyData,
+      CompanyName: companyData?.CompanyName,
+      CompanyTel: companyData?.CompanyTel,
+      CompanyAddress: companyData?.CompanyAddress,
+      ClientNo: companyData?.ClientNo,
+      ClientEmail: companyData?.ClientEmail,
+      ClientName: companyData?.ClientName,
       products,
     };
 
@@ -173,7 +145,7 @@ const Page = () => {
       toast.success(result.message);
       reset();
       setProducts([]);
-      setCompany({});
+      setCompany(null);
     } catch (error: any) {
       console.log("There was an Error While Creating an Challan: ", error);
       toast.error(error.message);
@@ -228,52 +200,52 @@ const Page = () => {
                 </div>
                 {company ? (
                   <>
-                  <div className="flex flex-col items-start justify-between">
+                    <div className="flex flex-col items-start justify-between">
                       <Label className="mb-2">Company Tel#</Label>
                       <Input
-                          type="number"
-                          placeholder="Enter Company Tel#"
-                          disabled
-                          value={company.CompanyTel}
+                        type="number"
+                        placeholder="Enter Company Tel#"
+                        disabled
+                        value={company.CompanyTel}
                       />
-                  </div>
-                  <div className="flex flex-col items-start justify-between">
+                    </div>
+                    <div className="flex flex-col items-start justify-between">
                       <Label className="mb-2">Company Address</Label>
                       <Input
-                          type="text"
-                          placeholder="Enter Company Address"
-                          disabled
-                          value={company.CompanyAddress}
+                        type="text"
+                        placeholder="Enter Company Address"
+                        disabled
+                        value={company.CompanyAddress}
                       />
-                  </div>
-                  <div className="flex flex-col items-start justify-between">
+                    </div>
+                    <div className="flex flex-col items-start justify-between">
                       <Label className="mb-2">Client Mobile #</Label>
                       <Input
-                          type="number"
-                          placeholder="Enter Client Mobile Number"
-                          disabled
-                          value={company.ClientNo}
+                        type="number"
+                        placeholder="Enter Client Mobile Number"
+                        disabled
+                        value={company.ClientNo}
                       />
-                  </div>
-                  <div className="flex flex-col items-start justify-between">
+                    </div>
+                    <div className="flex flex-col items-start justify-between">
                       <Label htmlFor="email">Email</Label>
                       <Input
-                          type="email"
-                          placeholder="Enter Client Email"
-                          disabled
-                          value={company.ClientEmail}
+                        type="email"
+                        placeholder="Enter Client Email"
+                        disabled
+                        value={company.ClientEmail}
                       />
-                  </div>
-                  <div className="flex flex-col items-start justify-between">
+                    </div>
+                    <div className="flex flex-col items-start justify-between">
                       <Label className="mb-2">Client Name</Label>
                       <Input
-                          type="text"
-                          placeholder="Enter Client Name"
-                          disabled
-                          value={company.ClientName}
+                        type="text"
+                        placeholder="Enter Client Name"
+                        disabled
+                        value={company.ClientName}
                       />
-                  </div>
-              </>
+                    </div>
+                  </>
                 ) : (
                   <>
                     {/* Company Details Inputs for Manual Entry */}

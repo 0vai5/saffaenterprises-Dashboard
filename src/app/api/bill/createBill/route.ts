@@ -1,6 +1,7 @@
 import Connect from '@/DBConfig/DBConfig';
 import { NextRequest, NextResponse } from 'next/server';
 import Bill from '@/models/bill.model';
+import DeliveryModel from '@/models/delivery.model';
 
 
 Connect();
@@ -8,17 +9,16 @@ Connect();
 export async function POST(request: NextRequest) {
     try {
         const {
-            invoiceID,
-            DCNo,
+            DeliveryRef,
+            SerialNo,
+            DCDate,
             ClientNo,
             ClientEmail,
             ClientName,
             CompanyName,
             CompanyTel,
             CompanyAddress,
-            InvoiceDate,
             PoNumber,
-            DCDate,
             products,
             grandTotal
         } = await request.json();
@@ -26,23 +26,24 @@ export async function POST(request: NextRequest) {
        
 
         const newBill = new Bill({
-            invoiceID,
+            SerialNo,
+            DeliveryRef,
             ClientNo,
             ClientEmail,
             ClientName,
             CompanyName,
             CompanyTel,
             CompanyAddress,
-            InvoiceDate,
-            PoNumber,
-            DCNo,
             DCDate,
+            PoNumber,
             products,
             grandTotal
         });
 
         // Save the invoice to the database
         await newBill.save();
+
+        const Delivery = await DeliveryModel.findByIdAndUpdate(DeliveryRef, { $set: { BillRef: newBill._id } });
 
         // Return the created invoice
         return NextResponse.json({ message: 'Challan created successfully', bill: newBill });

@@ -27,50 +27,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { File, Trash, EllipsisVerticalIcon, Eye } from "lucide-react";
+import { Trash, EllipsisVerticalIcon, Eye } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import ReactToPrint from "react-to-print";
 import Header from "@/components/Header";
-
-type Inputs = {
-  searchQuery: string;
-};
-
-type Challan = {
-  _id: string;
-  DCNo: string;
-  invoiceId: string;
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
-  CompanyName: string;
-  CompanyTel: number;
-  CompanyAddress: string;
-  InvoiceDate: string;
-  PoNumber: string;
-  DCDate: string;
-  products: {
-    description: string;
-    unit: number;
-    unitPrice: number;
-    total: number;
-  }[];
-  grandTotal: number;
-};
+import { SearchDelivery, SearchInput } from "@/types/types";
 
 const Search = () => {
-  const [data, setData] = useState<Challan[]>([]);
+  const [data, setData] = useState<SearchDelivery[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const cardRef = useRef<HTMLDivElement | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<SearchInput>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (FormData) => {
+  const onSubmit: SubmitHandler<SearchInput> = async (FormData) => {
     setError(null); // Reset error state
     try {
       const response = await fetch("/api/delivery/searchDelivery", {

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface Delivery extends Document {
-    SerialNo: string;
+    SerialNo: number;
     ClientNo: number;
     ClientEmail: string;
     ClientName: string;
@@ -17,7 +17,7 @@ export interface Delivery extends Document {
 }
 
 const DeliverySchema: Schema<Delivery> = new Schema({
-    SerialNo: { type: String, required: true },
+    SerialNo: { type: Number, required: true },
     CompanyName: { type: String, required: true },
     CompanyTel: { type: Number, required: true },
     CompanyAddress: { type: String, required: true },

@@ -22,28 +22,8 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import ReactToPrint from "react-to-print";
 import Link from "next/link";
+import { Bill } from "@/types/types";
 
-type Bill = {
-  invoiceID: string;
-  DCNo: string;
-  _id: string;
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
-  CompanyName: string;
-  CompanyTel: number;
-  CompanyAddress: string;
-  InvoiceDate: string;
-  PoNumber: string;
-  DCDate: string;
-  products: {
-    description: string;
-    unit: number;
-    unitPrice: number;
-    total: number;
-  }[];
-  grandTotal: number;
-};
 
 const Page = ({ params }: any) => {
   const [bill, setBill] = useState<Bill | null>(null);

@@ -15,18 +15,9 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
+import { User, UserInputs } from "@/types/types";
 
-type Inputs = {
-  email: string;
-  password: string;
-  username: string;
-};
 
-type User = {
-  _id: string;
-  username: string;
-  email: string;
-};
 
 const Page = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -37,7 +28,7 @@ const Page = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<Inputs>();
+  } = useForm<UserInputs>();
 
   const fetchUsers = async () => {
     try {
@@ -81,7 +72,7 @@ const Page = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<UserInputs> = async (data) => {
     setLoading(true);
     try {
       const response = await fetch("/api/users/createUser", {

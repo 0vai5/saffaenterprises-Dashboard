@@ -1,21 +1,21 @@
 import mongoose, {Document, Schema} from 'mongoose';
 
 export interface Company extends Document {
-    companyName: string;
-    companyTel: number;
-    companyAddress: string;
-    clientNo: number;
-    clientEmail: string;
-    clientName: string;
+    CompanyName: string;
+    CompanyTel: number;
+    CompanyAddress: string;
+    ClientNo: number;
+    ClientEmail: string;
+    ClientName: string;
 }
 
 const companySchema: Schema<Company> = new Schema({
-    companyName: { type: String, required: true },
-    companyTel: { type: Number, required: true },
-    companyAddress: { type: String, required: true },
-    clientNo: { type: Number },
-    clientEmail: { type: String },
-    clientName: { type: String }
+    CompanyName: { type: String, required: true },
+    CompanyTel: { type: Number, required: true },
+    CompanyAddress: { type: String, required: true },
+    ClientNo: { type: Number },
+    ClientEmail: { type: String },
+    ClientName: { type: String }
 })
 
 const CompanyModel = (mongoose.models.Company as mongoose.Model<Company>) || mongoose.model<Company>("Company", companySchema)

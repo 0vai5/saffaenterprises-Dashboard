@@ -16,11 +16,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
-
-type Inputs = {
-  email: string;
-  password: string;
-};
+import { UserInputs } from '@/types/types'
 
 const Page = () => {
   const router = useRouter();
@@ -28,11 +24,10 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<UserInputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<UserInputs> = async (data) => {
     try {
       const response = await fetch("/api/users/login", {
         method: "POST",

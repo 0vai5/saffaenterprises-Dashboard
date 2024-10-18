@@ -7,9 +7,9 @@ Connect();
 export async function POST(request: NextRequest) {
   try {
     // Parse the request body to get companyName
-    const { companyName } = await request.json();
+    const { CompanyName } = await request.json();
 
-    if (!companyName) {
+    if (!CompanyName) {
       return NextResponse.json({
         message: "Company name is required",
         status: 400,
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Search for the company using companyName
-    const company = await Company.findOne({companyName});
+    const company = await Company.findOne({CompanyName});
     console.log("Company Found: ", company);
 
     if (!company) {

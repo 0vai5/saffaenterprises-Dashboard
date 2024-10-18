@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -21,58 +21,96 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
-
-type Inputs = {
-  CompanyName: string;
-  CompanyTel: number;
-  CompanyAddress: string;
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
-  deliveryDate: string;
-  PoNumber: string;
-  DCDate: string;
-  InvoiceDate: string;
-  DCNo: string;
-};
-
-type Products = {
-  description: string;
-  unit: number;
-  unitPrice: number;
-  total: number;
-};
+import { BillInputs, BillProducts, DeliveryData } from "@/types/types";
 
 const Page = () => {
-  const router = useRouter();
-  const [products, setProducts] = useState<Products[]>([]);
-
-  const handleRowAddition = () => {
-    setProducts((prevProducts) => [
-      ...prevProducts,
-      { description: "", unit: 1, unitPrice: 0, total: 0 },
-    ]);
-  };
+  const [products, setProducts] = useState<BillProducts[]>([]);
+  const [deliveryData, setDeliveryData] = useState<DeliveryData | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<BillInputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const fetchDelivery = async (SerialNo: number) => {
+    const response = await fetch("/api/delivery/getDeliveryBySerialNo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ SerialNo }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      toast.error(result.message);
+      return;
+    }
+
+    console.log("Fetched delivery data:", result.data);
+
+    setDeliveryData(result.data);
+
+    if (result.data.products) {
+      const productArray = result.data.products.map((product: any) => ({
+        description: product.description,
+        unit: 1,
+        unitPrice: 0,
+        total: 0,
+      }));
+
+      setProducts(productArray);
+    }
+
+    toast.success(result.message);
+  };
+
+  useEffect(() => {
+    if (deliveryData) {
+      console.log("Updated deliveryData:", deliveryData);
+    }
+  }, [deliveryData]);
+
+  let SerialNo = watch("SerialNo");
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    if (SerialNo) {
+      timeoutId = setTimeout(() => {
+        fetchDelivery(SerialNo);
+      }, 1000);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [SerialNo]);
+
+  const onSubmit: SubmitHandler<BillInputs> = async (data) => {
     const grandTotal = calculateGrandTotal();
+    let deliveryInfo = deliveryData;
+    console.log("delivery Information", deliveryInfo);
     const bill = {
-      ...data,
+      SerialNo: data.SerialNo,
       products,
       grandTotal,
+      CompanyName: deliveryInfo?.CompanyName,
+      CompanyAddress: deliveryInfo?.CompanyAddress, 
+      CompanyTel: deliveryInfo?.CompanyTel,
+      ClientEmail: deliveryInfo?.ClientEmail,
+      ClientName: deliveryInfo?.ClientName,
+      ClientNo: deliveryInfo?.ClientNo,
+      DCDate: deliveryInfo?.DCDate,
+      DeliveryRef: deliveryInfo?._id,
+      PoNumber: deliveryInfo?.PoNumber,
     };
 
+    console.log("Bill Data:", bill);
     try {
       const response = await fetch("/api/bill/createBill", {
         method: "POST",
@@ -81,16 +119,20 @@ const Page = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create bill");
+        const result = await response.json();
+        console.log("Failed to create bill:", result.message);
+        throw new Error(result.message || "Failed to create bill");
       }
 
       const result = await response.json();
+      console.log("Bill Created Successfully:", result.message); // Log success message
       toast.success(result.message);
+
       reset();
       setProducts([]);
     } catch (error: any) {
-      console.log("There was an Error While Creating an bill: ", error);
-      toast.error(error.message);
+      console.error("Error While Creating Bill:", error.message); // Log the error message
+      toast.error(error.message); // Show error to the user
     }
   };
 
@@ -112,10 +154,6 @@ const Page = () => {
     return products.reduce((total, product) => total + product.total, 0);
   };
 
-  const handleDeletion = (index: number) => {
-    setProducts(products.filter((_, i) => i !== index));
-  };
-
   return (
     <>
       <Header />
@@ -127,82 +165,6 @@ const Page = () => {
         >
           <Card className="dark:bg-transparent dark:border-[#27272A]">
             <CardHeader>
-              <CardTitle>Client Information</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="mb-3">
-                Important Information about the Client and its Company
-              </CardDescription>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">Company Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="Enter Company Name"
-                    {...register("CompanyName", { required: true })}
-                  />
-                  {errors.CompanyName && (
-                    <p className="error">Company Name is required</p>
-                  )}
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">Company Tel#</Label>
-                  <Input
-                    type="text"
-                    placeholder="Enter Company Tel#"
-                    {...register("CompanyTel", { required: true })}
-                  />
-                  {errors.CompanyTel && (
-                    <p className="error">Company Tel# is required</p>
-                  )}
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">Company Address</Label>
-                  <Input
-                    type="text"
-                    placeholder="Enter Company Address"
-                    {...register("CompanyAddress", { required: true })}
-                  />
-                  {errors.CompanyAddress && (
-                    <p className="error">Company Address is required</p>
-                  )}
-                </div>
-
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">Client Mobile #</Label>
-                  <Input
-                    type="number"
-                    placeholder="Enter Client Mobile Number"
-                    {...register("ClientNo")}
-                  />
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    type="email"
-                    placeholder="Enter Client Email"
-                    {...register("ClientEmail", {
-                      pattern: {
-                        value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                        message: "Invalid email address",
-                      },
-                    })}
-                  />
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">Client Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="Enter Client Name"
-                    {...register("ClientName")}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="dark:bg-transparent dark:border-[#27272A]">
-            <CardHeader>
               <CardTitle>delivery Information</CardTitle>
             </CardHeader>
             <CardContent>
@@ -211,42 +173,15 @@ const Page = () => {
               </CardDescription>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">DC Date</Label>
+                  <Label className="mb-2">Serial No.</Label>
                   <Input
-                    type="date"
-                    {...register("DCDate", { required: true })}
+                    type="number"
+                    {...register("SerialNo", { required: true })}
+                    placeholder="Enter Serial No."
                   />
-                  {errors.DCDate && (
-                    <p className="error">DC Date is required</p>
+                  {errors.SerialNo && (
+                    <p className="error">SerialNo. is required</p>
                   )}
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">InvoiceDate</Label>
-                  <Input
-                    type="date"
-                    {...register("InvoiceDate", { required: true })}
-                  />
-                  {errors.InvoiceDate && (
-                    <p className="error">Date is required</p>
-                  )}
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">PO. No.</Label>
-                  <Input
-                    type="text"
-                    {...register("PoNumber", { required: true })}
-                  />
-                  {errors.PoNumber && (
-                    <p className="error">PO. No. is required</p>
-                  )}
-                </div>
-                <div className="flex flex-col items-start justify-between">
-                  <Label className="mb-2">DC No.</Label>
-                  <Input
-                    type="text"
-                    {...register("DCNo", { required: true })}
-                  />
-                  {errors.DCNo && <p className="error">DC No. is required</p>}
                 </div>
               </div>
             </CardContent>
@@ -276,9 +211,6 @@ const Page = () => {
                       <TableHead className="hidden md:table-cell">
                         Amount
                       </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Actions
-                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -291,7 +223,7 @@ const Page = () => {
                           <Input
                             type="text"
                             placeholder="Description"
-                            value={product.description}
+                            value={product.description} // Now shows product description
                             onChange={(e) =>
                               handleInputChange(
                                 index,
@@ -333,17 +265,6 @@ const Page = () => {
                           Rs.{" "}
                           {product.total ? product.total.toFixed(2) : "0.00"}
                         </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="h-7 gap-1 text-sm"
-                            onClick={() => handleDeletion(index)}
-                          >
-                            <Trash className="h-3.5 w-3.5" />
-                            <span className="not-sr-only">Delete</span>
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -351,11 +272,6 @@ const Page = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between items-center flex-row">
-              <div>
-                <Button type="button" onClick={handleRowAddition}>
-                  Add Item
-                </Button>
-              </div>
               <div>Grand Total: Rs. {calculateGrandTotal().toFixed(2)}</div>
             </CardFooter>
           </Card>
