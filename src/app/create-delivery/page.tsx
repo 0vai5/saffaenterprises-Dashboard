@@ -6,8 +6,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-  CardFooter,
+  CardTitle
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -25,10 +24,12 @@ import { Trash } from "lucide-react";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
 import { Company, DeliveryInputs, DeliveryProducts } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [products, setProducts] = useState<DeliveryProducts[]>([]);
+  const Router = useRouter();
 
   const handleRowAddition = () => {
     setProducts((prevProducts) => [...prevProducts, { description: "" }]);
@@ -39,6 +40,7 @@ const Page = () => {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<DeliveryInputs>();
 
@@ -53,7 +55,7 @@ const Page = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        setCompany({});
+        setCompany(null);
         console.log("No company found, setting company to null.");
         return;
       }
@@ -83,13 +85,25 @@ const Page = () => {
     };
   }, [companyName]);
 
+  // Pre-fill the form with company data when company is found
+  useEffect(() => {
+    if (company) {
+      setValue("CompanyName", company.CompanyName || "");
+      setValue("CompanyTel", company.CompanyTel || 0);
+      setValue("CompanyAddress", company.CompanyAddress || "");
+      setValue("ClientNo", company.ClientNo || 0);
+      setValue("ClientEmail", company.ClientEmail || "");
+      setValue("ClientName", company.ClientName || "");
+    }
+  }, [company, setValue]);
+
   const createCompany = async (data: DeliveryInputs) => {
     try {
       const response = await fetch("/api/company/createCompany", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          CompanyName: data.CompanyName, // Ensure case matches with backend
+          CompanyName: data.CompanyName,
           CompanyTel: data.CompanyTel,
           CompanyAddress: data.CompanyAddress,
           ClientNo: data.ClientNo,
@@ -102,7 +116,7 @@ const Page = () => {
 
       if (response.ok) {
         toast.success(result.message);
-        return result.company; // Return the created company object
+        return result.company;
       } else {
         throw new Error(result.message || "Error Creating Company");
       }
@@ -117,8 +131,9 @@ const Page = () => {
     let companyData = company;
 
     if (!companyData) {
-      let companyData = await createCompany(data);
+      companyData = await createCompany(data);
     }
+
     const delivery = {
       ...data,
       CompanyName: companyData?.CompanyName,
@@ -146,6 +161,7 @@ const Page = () => {
       reset();
       setProducts([]);
       setCompany(null);
+      companyData = null;
     } catch (error: any) {
       console.log("There was an Error While Creating an Challan: ", error);
       toast.error(error.message);
@@ -205,8 +221,8 @@ const Page = () => {
                       <Input
                         type="number"
                         placeholder="Enter Company Tel#"
-                        disabled
                         value={company.CompanyTel}
+                        readOnly
                       />
                     </div>
                     <div className="flex flex-col items-start justify-between">
@@ -214,8 +230,8 @@ const Page = () => {
                       <Input
                         type="text"
                         placeholder="Enter Company Address"
-                        disabled
                         value={company.CompanyAddress}
+                        readOnly
                       />
                     </div>
                     <div className="flex flex-col items-start justify-between">
@@ -223,8 +239,8 @@ const Page = () => {
                       <Input
                         type="number"
                         placeholder="Enter Client Mobile Number"
-                        disabled
                         value={company.ClientNo}
+                        readOnly
                       />
                     </div>
                     <div className="flex flex-col items-start justify-between">
@@ -232,8 +248,8 @@ const Page = () => {
                       <Input
                         type="email"
                         placeholder="Enter Client Email"
-                        disabled
                         value={company.ClientEmail}
+                        readOnly
                       />
                     </div>
                     <div className="flex flex-col items-start justify-between">
@@ -241,14 +257,13 @@ const Page = () => {
                       <Input
                         type="text"
                         placeholder="Enter Client Name"
-                        disabled
                         value={company.ClientName}
+                        readOnly
                       />
                     </div>
                   </>
                 ) : (
                   <>
-                    {/* Company Details Inputs for Manual Entry */}
                     <div className="flex flex-col items-start justify-between">
                       <Label className="mb-2">Company Tel#</Label>
                       <Input
@@ -284,12 +299,7 @@ const Page = () => {
                       <Input
                         type="email"
                         placeholder="Enter Client Email"
-                        {...register("ClientEmail", {
-                          pattern: {
-                            value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                            message: "Invalid email address",
-                          },
-                        })}
+                        {...register("ClientEmail")}
                       />
                     </div>
                     <div className="flex flex-col items-start justify-between">
@@ -297,15 +307,17 @@ const Page = () => {
                       <Input
                         type="text"
                         placeholder="Enter Client Name"
-                        {...register("ClientName")}
+                        {...register("ClientName", { required: true })}
                       />
+                      {errors.ClientName && (
+                        <p className="error">Client Name is required</p>
+                      )}
                     </div>
                   </>
                 )}
               </div>
             </CardContent>
           </Card>
-
           <Card className="dark:bg-transparent dark:border-[#27272A]">
             <CardHeader>
               <CardTitle>delivery Information</CardTitle>
@@ -338,75 +350,59 @@ const Page = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card className="dark:bg-transparent dark:border-[#27272A]">
-            <CardHeader className="px-7">
-              <CardTitle>Products Information</CardTitle>
+            <CardHeader>
+              <CardTitle>Delivery Products</CardTitle>
               <CardDescription>
-                Products Purchased by the Client
+                Add, Remove or Update Products for the Delivery
               </CardDescription>
             </CardHeader>
-            <CardContent className="mb-5">
-              <div className="overflow-auto">
-                <Table className="min-w-full">
-                  <TableHeader>
-                    <TableRow className="grid grid-cols-5 items-center pt-5">
-                      <TableHead className="hidden md:table-cell">
-                        Description
-                      </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Actions
-                      </TableHead>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Description</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {products.map((product, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Input
+                          placeholder="Description"
+                          value={product.description}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "description",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Trash
+                          className="cursor-pointer"
+                          onClick={() => handleDeletion(index)}
+                        />
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {products.map((product, index) => (
-                      <TableRow
-                        key={index}
-                        className="bg-accent grid justify-between grid-cols-1 md:grid-cols-5 items-center"
-                      >
-                        <TableCell>
-                          <Input
-                            type="text"
-                            placeholder="Description"
-                            value={product.description}
-                            onChange={(e) =>
-                              handleInputChange(
-                                index,
-                                "description",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="h-7 gap-1 text-sm"
-                            onClick={() => handleDeletion(index)}
-                          >
-                            <Trash className="h-3.5 w-3.5" />
-                            <span className="not-sr-only">Delete</span>
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                  ))}
+                </TableBody>
+              </Table>
+              <Button
+                type="button"
+                onClick={handleRowAddition}
+                className="mt-2"
+              >
+                Add Product
+              </Button>
             </CardContent>
-            <CardFooter className="flex justify-between items-center flex-row">
-              <div>
-                <Button type="button" onClick={handleRowAddition}>
-                  Add Item
-                </Button>
-              </div>
-            </CardFooter>
           </Card>
 
-          <Button variant={"secondary"} type="submit">
-            Create Delivery
+          <Button type="submit" className="self-end">
+            Submit Delivery
           </Button>
         </form>
       </section>

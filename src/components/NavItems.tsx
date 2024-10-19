@@ -27,12 +27,12 @@ const NavItems = () => {
                 Create
               </NavigationMenuTrigger>
               <NavigationMenuContent className="p-5 text-lg">
-                <NavigationMenuLink href="/create-bill" className="mb-10">
-                  CreateBill
-                </NavigationMenuLink>
-                <br />
                 <NavigationMenuLink href="/create-delivery">
                   CreateDelivery
+                </NavigationMenuLink>
+                <br />
+                <NavigationMenuLink href="/create-bill" className="mb-10">
+                  CreateBill
                 </NavigationMenuLink>
               </NavigationMenuContent>
             </NavigationMenuItem>
