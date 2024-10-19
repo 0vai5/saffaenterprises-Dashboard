@@ -7,16 +7,16 @@ Connect();
 export async function POST(request: NextRequest) {
     try {
         const {
-            companyName,
-            companyAddress,
-            companyTel,
-            clientEmail,
-            clientNo,
-            clientName
+            CompanyName,
+            CompanyAddress,
+            CompanyTel,
+            ClientEmail,
+            ClientNo,
+            ClientName
         } = await request.json();
 
         // Simple validation to check required fields
-        if (!companyName || !companyAddress || !companyTel || !clientEmail || !clientNo || !clientName) {
+        if (!CompanyName || !CompanyAddress || !CompanyTel || !ClientEmail || !ClientNo || !ClientName) {
             return NextResponse.json({
                 message: 'All fields are required',
                 status: 400
@@ -24,12 +24,12 @@ export async function POST(request: NextRequest) {
         }
 
         const company = new Company({
-            companyName,
-            companyAddress,
-            companyTel,
-            clientEmail,
-            clientNo,
-            clientName
+            CompanyName,
+            CompanyAddress,
+            CompanyTel,
+            ClientEmail,
+            ClientNo,
+            ClientName
         });
 
         await company.save();
