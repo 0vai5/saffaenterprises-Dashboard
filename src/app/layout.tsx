@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const nunito = Nunito({ subsets: ["latin"], weight: ["400"] });
+const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
-  title: "SaffaEnterPrises Invoice Manager",
+  title: "SaffaEnterPrises Dashboard",
   description:
-    "A ideal invoice and task management software for small buisnesses",
+    "A ideal invoice and task management software for SaffaEnterPrises",
 };
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link
+      <link
           rel="shortcut icon"
           href="/saffaenterprises.png"
           type="image/x-icon"
@@ -29,7 +29,7 @@ export default function RootLayout({
       </head>
       <Analytics />
       <SpeedInsights />
-      <body className={`${nunito.className} dark:bg-[#09090B]`}>
+      <body className={`${lato.className} dark:bg-[#09090B]`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

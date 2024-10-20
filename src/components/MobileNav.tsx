@@ -24,6 +24,14 @@ const MobileNav = () => {
                 alt="Company Logo"
                 width={150}
                 height={100}
+                className="dark:hidden"
+              />
+              <Image
+                src={'/saffaenterprises-dark.png'}
+                alt="Company Logo"
+                width={150}
+                height={100}
+                className="hidden dark:block"
               />
             </Link>
           </div>

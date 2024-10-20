@@ -46,7 +46,8 @@ export default function UserDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src="/user.png" className="cursor-pointer" />
+          <AvatarImage src="/user.svg" className="cursor-pointer dark:hidden" />
+          <AvatarImage src="/user-dark.svg" className="cursor-pointer hidden dark:flex" />
           <AvatarFallback className="cursor-pointer">CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
