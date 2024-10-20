@@ -24,12 +24,15 @@ import { Separator } from "@/components/ui/separator";
 import ReactToPrint from "react-to-print";
 import Link from "next/link";
 import { Delivery } from "@/types/types";
+import Loader from "@/components/Loader";
 
 const Page = ({ params }: any) => {
   const [delivery, setDelivery] = useState<Delivery | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchDeliveryById = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/delivery/findDelivery", {
         method: "POST",
@@ -44,8 +47,10 @@ const Page = ({ params }: any) => {
       }
       const result = await response.json();
       setDelivery(result.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading
     }
   };
 
@@ -53,8 +58,8 @@ const Page = ({ params }: any) => {
     fetchDeliveryById();
   }, [params.id]);
 
-  if (!delivery) {
-    return <div>Loading...</div>;
+  if (!delivery || loading) {
+    return <Loader />;
   }
 
   return (

@@ -24,10 +24,12 @@ import {
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
 import { BillInputs, BillProducts, DeliveryData } from "@/types/types";
+import Loader from "@/components/Loader";
 
 const Page = () => {
   const [products, setProducts] = useState<BillProducts[]>([]);
   const [deliveryData, setDeliveryData] = useState<DeliveryData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -38,42 +40,44 @@ const Page = () => {
   } = useForm<BillInputs>();
 
   const fetchDelivery = async (SerialNo: number) => {
-    const response = await fetch("/api/delivery/getDeliveryBySerialNo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ SerialNo }),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      toast.error(result.message);
-      return;
+    setLoading(true);
+    try {
+      const response = await fetch("/api/delivery/getDeliveryBySerialNo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ SerialNo }),
+      });
+  
+      const result = await response.json();
+  
+      if (!response.ok) {
+        toast.error(result.message);
+        return;
+      }
+  
+      console.log("Fetched delivery data:", result.data);
+  
+      setDeliveryData(result.data);
+  
+      if (result.data.products) {
+        const productArray = result.data.products.map((product: any) => ({
+          description: product.description,
+          unit: product.unit,
+          unitPrice: 0,
+          total: 0,
+        }));
+  
+        setProducts(productArray);
+      }
+      setLoading(false);
+      toast.success(result.message);
+    } catch (error) {
+      toast.error("There was an Error While Fetching Delivery");
+      setLoading(false);
     }
-
-    console.log("Fetched delivery data:", result.data);
-
-    setDeliveryData(result.data);
-
-    if (result.data.products) {
-      const productArray = result.data.products.map((product: any) => ({
-        description: product.description,
-        unit: product.unit,
-        unitPrice: 0,
-        total: 0,
-      }));
-
-      setProducts(productArray);
-    }
-
-    toast.success(result.message);
+   
   };
 
-  useEffect(() => {
-    if (deliveryData) {
-      console.log("Updated deliveryData:", deliveryData);
-    }
-  }, [deliveryData]);
 
   let SerialNo = watch("SerialNo");
 
@@ -92,9 +96,9 @@ const Page = () => {
   }, [SerialNo]);
 
   const onSubmit: SubmitHandler<BillInputs> = async (data) => {
+    setLoading(true);
     const grandTotal = calculateGrandTotal();
     let deliveryInfo = deliveryData;
-    console.log("delivery Information", deliveryInfo);
     const bill = {
       SerialNo: data.SerialNo,
       products,
@@ -125,14 +129,13 @@ const Page = () => {
       }
 
       const result = await response.json();
-      console.log("Bill Created Successfully:", result.message); // Log success message
+      setLoading(false);
       toast.success(result.message);
-
       reset();
       setProducts([]);
     } catch (error: any) {
-      console.error("Error While Creating Bill:", error.message); // Log the error message
-      toast.error(error.message); // Show error to the user
+      toast.error(error.message); 
+      setLoading(false);
     }
   };
 
@@ -158,7 +161,10 @@ const Page = () => {
     <>
       <Header />
       <Toaster position="top-right" reverseOrder={false} />
-      <section className="max-container">
+      {loading === true ? (
+        <Loader />
+      ) : (
+        <section className="max-container">
         <form
           className="flex flex-col justify-between gap-4"
           onSubmit={handleSubmit(onSubmit)}
@@ -281,6 +287,7 @@ const Page = () => {
           </Button>
         </form>
       </section>
+      )}
     </>
   );
 };

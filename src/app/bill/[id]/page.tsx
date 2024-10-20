@@ -23,12 +23,15 @@ import { Separator } from "@/components/ui/separator";
 import ReactToPrint from "react-to-print";
 import Link from "next/link";
 import { Bill } from "@/types/types";
+import Loader from "@/components/Loader";
 
 const Page = ({ params }: any) => {
   const [bill, setBill] = useState<Bill | null>(null);
+  const [loading, setLoading] = useState(false);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const fetchBillById = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/bill/findBill", {
         method: "POST",
@@ -43,6 +46,7 @@ const Page = ({ params }: any) => {
       }
       const result = await response.json();
       setBill(result.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -52,8 +56,8 @@ const Page = ({ params }: any) => {
     fetchBillById();
   }, [params.id]);
 
-  if (!bill) {
-    return <div>Loading...</div>;
+  if (!bill || loading) {
+    return <Loader />;
   }
 
   return (

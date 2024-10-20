@@ -27,7 +27,7 @@ const Header = () => {
           />
         </Link>
       </div>
-      <nav className="hidden md:block">
+      <nav className="sm:hidden lg:block md:hidden">
         <NavItems />
       </nav>
       <div className="flex justify-center flex-row-reverse items-center gap-3">

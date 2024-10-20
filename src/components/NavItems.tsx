@@ -14,7 +14,7 @@ import {
 const NavItems = () => {
   return (
     <>
-      <ul className="flex flex-col md:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
+      <ul className="flex sm:flex-col md:flex-col lg:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
         <li>
           <Link href="/">
             <h4 className="text-xl font-semibold">Dashboard</h4>

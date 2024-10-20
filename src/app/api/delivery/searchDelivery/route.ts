@@ -19,11 +19,13 @@ export async function POST(request: NextRequest) {
 
         const deliverys = await Delivery.find({
             $or: [
-                { invoiceId: { $regex: regex } },
+                ...(numericQuery !== null ? [
+                    { SerialNo: numericQuery }
+                ] : []),
                 { CompanyName: { $regex: regex } },
                 { ClientName: { $regex: regex } },
                 { ClientEmail: { $regex: regex } },
-                { PoNumber: {$regex: regex} },
+                { PoNumber: { $regex: regex } },
                 ...(numericQuery !== null ? [
                     { ClientNo: numericQuery }
                 ] : [])
@@ -38,7 +40,7 @@ export async function POST(request: NextRequest) {
         }
 
         return NextResponse.json({
-            message: "delivery fetched successfully",
+            message: "Delivery fetched successfully",
             data: deliverys,
             status: 200
         });

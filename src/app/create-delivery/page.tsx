@@ -24,12 +24,12 @@ import { Trash } from "lucide-react";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
 import { Company, DeliveryInputs, DeliveryProducts } from "@/types/types";
-import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
 
 const Page = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [products, setProducts] = useState<DeliveryProducts[]>([]);
-  const Router = useRouter();
+  const [loading, setLoading] = useState<Boolean>(false);
 
   const handleRowAddition = () => {
     setProducts((prevProducts) => [
@@ -48,6 +48,7 @@ const Page = () => {
   } = useForm<DeliveryInputs>();
 
   const fetchCompany = async (CompanyName: string) => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/company/findCompany/`, {
         method: "POST",
@@ -64,8 +65,8 @@ const Page = () => {
       }
 
       setCompany(result.company);
-      console.log("Company Found: ", company);
       toast.success(result.message);
+      setLoading(false);
     } catch (error) {
       console.log("There was an Error While Fetching Company: ", error);
       toast.error("There was an Error While Fetching Company");
@@ -131,6 +132,7 @@ const Page = () => {
   };
 
   const onSubmit: SubmitHandler<DeliveryInputs> = async (data) => {
+    setLoading(true);
     let companyData = company;
 
     if (!companyData) {
@@ -165,9 +167,11 @@ const Page = () => {
       setProducts([]);
       setCompany(null);
       companyData = null;
+      setLoading(false);
     } catch (error: any) {
       console.log("There was an Error While Creating an Challan: ", error);
       toast.error(error.message);
+      setLoading(false);
     }
   };
 
@@ -192,7 +196,10 @@ const Page = () => {
     <>
       <Header />
       <Toaster position="top-right" reverseOrder={false} />
-      <section className="max-container">
+      {loading === true ? (
+        <Loader />
+      ) : (
+        <section className="max-container">
         <form
           className="flex flex-col justify-between gap-4"
           onSubmit={handleSubmit(onSubmit)}
@@ -205,7 +212,7 @@ const Page = () => {
               <CardDescription className="mb-3">
                 Important Information about the Client and its Company
               </CardDescription>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid sm:grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3">
                 <div className="flex flex-col items-start justify-between">
                   <Label className="mb-2">Company Name</Label>
                   <Input
@@ -344,6 +351,7 @@ const Page = () => {
                   <Label className="mb-2">PO. No.</Label>
                   <Input
                     type="text"
+                    placeholder="Enter PO. No."
                     {...register("PoNumber", { required: true })}
                   />
                   {errors.PoNumber && (
@@ -370,7 +378,7 @@ const Page = () => {
                 </TableHeader>
                 <TableBody>
                   {products.map((product, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} className="w-full">
                       <TableCell>
                         <Input
                           placeholder="Description"
@@ -418,6 +426,7 @@ const Page = () => {
           </Button>
         </form>
       </section>
+      )}
     </>
   );
 };

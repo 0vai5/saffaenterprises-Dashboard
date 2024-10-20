@@ -17,9 +17,12 @@ import Link from "next/link";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import { UserInputs } from '@/types/types'
+import Loader from "@/components/Loader";
+import { useState } from "react";
 
 const Page = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -28,6 +31,7 @@ const Page = () => {
   } = useForm<UserInputs>();
 
   const onSubmit: SubmitHandler<UserInputs> = async (data) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/users/login", {
         method: "POST",
@@ -45,15 +49,17 @@ const Page = () => {
 
       router.push('/');
       toast.success(result.message);
+      setLoading(false);
     } catch (error: any) {
       console.log("Error in Logging in: ", error);
       toast.error(error.message);
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <div className="px-4 py-4">
+      <div className="px-4 py-2">
         <Link href="/">
           <Image
             src={"/saffaenterprises.png"}
@@ -74,7 +80,10 @@ const Page = () => {
         </Link>
       </div>
       <Toaster position="top-right" reverseOrder={false} />
-      <section className="container flex justify-center items-center">
+      {loading === true ? (
+        <Loader />
+      ) : (
+        <section className="container flex justify-center items-center">
         <Card className="w-full max-w-sm dark:bg-transparent dark:border-[#27272A]">
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
@@ -124,6 +133,7 @@ const Page = () => {
           </form>
         </Card>
       </section>
+      )}
     </>
   );
 };

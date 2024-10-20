@@ -16,13 +16,11 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
 import { User, UserInputs } from "@/types/types";
-
-
+import Loader from "@/components/Loader";
 
 const Page = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -31,19 +29,21 @@ const Page = () => {
   } = useForm<UserInputs>();
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/users/findUsers", {
         cache: "no-store",
       });
       const result = await response.json();
-      if (response.ok) {
-        setUsers(result.data);
-        setError(null);
-      } else {
-        setError(result.message);
+      if (!response.ok) {
+        toast.error(result.message);
       }
+      setUsers(result.data);
+      toast.success(result.message);
+      setLoading(false);
     } catch (error) {
-      setError("Error fetching users");
+      toast.error("Error fetching users");
+      setLoading(false);
     }
   };
 
@@ -52,6 +52,7 @@ const Page = () => {
   }, []);
 
   const deleteUser = async (userId: string) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/users/deleteUser", {
         method: "POST",
@@ -61,14 +62,16 @@ const Page = () => {
         body: JSON.stringify({ id: userId }),
       });
 
-      if (response.ok) {
-        await fetchUsers();
+      if (!response.ok) {
         // setUsers(prevUsers => prevUsers.filter(user => user._id !== userId));
-      } else {
-        console.log("Failed to delete user");
+        toast.error("Failed to delete user");
       }
+      await fetchUsers();
+      toast.success("User deleted successfully");
+      setLoading(false);
     } catch (error) {
-      console.log("Failed to delete user", error);
+      toast.error("Failed to delete user");
+      setLoading(false);
     }
   };
 
@@ -93,7 +96,6 @@ const Page = () => {
       const result = await response.json();
       toast.success(result.message);
     } catch (error: any) {
-      console.error("Error creating user:", error);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -103,14 +105,17 @@ const Page = () => {
   return (
     <>
       <Header />
-      <section className="max-container gap-5">
+      {loading === true ? (
+        <Loader />
+      ) : (
+        <section className="max-container gap-5">
         <Toaster position="top-right" reverseOrder={false} />
         <Card className="px-4 py-4 mb-5 dark:bg-transparent dark:border-[#27272A]">
           <CardTitle>Active Users</CardTitle>
           <CardDescription>All the Users Currently Active</CardDescription>
           <CardContent>
             {users && users.length > 0 ? (
-              <div className="grid justify-between grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid justify-between grid-cols-1 md:grid-cols-2 sm:grid-cols-1 gap-3">
                 {users.map((user) => (
                   <Card key={user._id} className="px-5 py-5">
                     <CardTitle>{user.username}</CardTitle>
@@ -151,6 +156,7 @@ const Page = () => {
                       message: "Invalid email address",
                     },
                   })}
+                  placeholder="Enter Email"
                 />
                 {errors.email && <p>{errors.email.message}</p>}
               </div>
@@ -160,6 +166,7 @@ const Page = () => {
                   {...register("username", {
                     required: "Username is required",
                   })}
+                  placeholder="Enter Username"
                 />
                 {errors.username && <p>{errors.username.message}</p>}
               </div>
@@ -170,6 +177,7 @@ const Page = () => {
                   {...register("password", {
                     required: "Password is required",
                   })}
+                  placeholder="Enter Password"
                 />
                 {errors.password && <p>{errors.password.message}</p>}
               </div>
@@ -182,6 +190,7 @@ const Page = () => {
           </form>
         </Card>
       </section>
+      )}
     </>
   );
 };
