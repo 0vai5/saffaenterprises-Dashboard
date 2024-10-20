@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Trash, EllipsisVerticalIcon, Eye } from "lucide-react";
+import { Trash, EllipsisVerticalIcon, Eye, CirclePlus } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Header from "@/components/Header";
 import { SearchDelivery, SearchInput } from "@/types/types";
+import { Badge } from "@/components/ui/badge";
 
 const Search = () => {
   const [data, setData] = useState<SearchDelivery[]>([]);
@@ -40,10 +41,11 @@ const Search = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SearchInput>();
 
-  const onSubmit: SubmitHandler<SearchInput> = async (FormData) => {
+  const onSubmit: SubmitHandler<SearchInput> = async (data) => {
     setError(null); // Reset error state
     try {
       const response = await fetch("/api/delivery/searchDelivery", {
@@ -51,7 +53,7 @@ const Search = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(FormData),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -69,7 +71,7 @@ const Search = () => {
 
   const deleteInvoice = async (_id: string) => {
     try {
-      const response = await fetch("/api/challan/deleteChallan", {
+      const response = await fetch("/api/challan/deleteDelivery", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,6 +94,20 @@ const Search = () => {
     }
   };
 
+  const searchQuery = watch("searchQuery");
+
+  useEffect(() => {
+    let timeOutID: ReturnType<typeof setTimeout>;
+
+    if (searchQuery) {
+      timeOutID = setTimeout(() => {
+        onSubmit({ searchQuery });
+      }, 1000);
+    }
+
+    return () => clearTimeout(timeOutID);
+  }, [searchQuery]);
+
   return (
     <>
       <Header />
@@ -103,10 +119,7 @@ const Search = () => {
             <CardDescription>Search for Challans</CardDescription>
           </CardHeader>
           <CardContent>
-            <form
-              className="flex flex-col md:flex-row justify-between gap-10 items-center mb-5"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form className="flex flex-col md:flex-row justify-between gap-10 items-center mb-5">
               <div className="flex justify-start flex-col items-start w-full">
                 <Label>Search</Label>
                 <Input
@@ -119,21 +132,18 @@ const Search = () => {
                   <p className="error">Search query is required</p>
                 )}
               </div>
-              <div className="flex justify-start flex-col items-start">
-                <Button className="relative top-1.5">Search</Button>
-              </div>
             </form>
             {error && <p className="error">{error}</p>}
           </CardContent>
         </Card>
         <div className="flex items-center justify-between ">
-          <h1 className="subhead-text mb-5">Challan History</h1>
+          <h1 className="subhead-text mb-5">Delivery History</h1>
         </div>
         <div>
           <Card className="dark:bg-transparent dark:border-[#27272A]">
             <CardHeader className="px-7">
-              <CardTitle>Challans</CardTitle>
-              <CardDescription>Recent Challans registered.</CardDescription>
+              <CardTitle>Delivery</CardTitle>
+              <CardDescription>Recent Deliveries registered.</CardDescription>
             </CardHeader>
             <CardContent>
               <div>
@@ -141,28 +151,34 @@ const Search = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Client</TableHead>
+                      <TableHead>Status</TableHead>
                       <TableHead className="hidden md:table-cell">
-                        Invoice Date
+                        Delivery Date
                       </TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {data && data.length > 0 ? (
-                      data.map((challan, index) => (
+                      data.map((data, index) => (
                         <TableRow key={index} className="bg-accent">
                           <TableCell>
-                            <Link href={`/invoice/${challan._id}`}>
-                              <div className="font-medium">
-                                <p>{challan.CompanyName}</p>
-                                <p>{challan.ClientEmail}</p>
-                              </div>
-                            </Link>
+                            <div className="font-medium">
+                              <p>{data.CompanyName}</p>
+                              <p>{data.ClientEmail}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="font-medium">
+                              {data.status === true ? (
+                                <Badge variant={"success"}>Billed</Badge>
+                              ) : (
+                                <Badge variant={"danger"}>Not Billed</Badge>
+                              )}
+                            </div>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            <Link href={`/invoice/${challan._id}`}>
-                              {challan.InvoiceDate}
-                            </Link>
+                            {data.DCDate}
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="ml-auto flex items-center justify-center gap-2">
@@ -185,7 +201,7 @@ const Search = () => {
                                       size="sm"
                                       variant="destructive"
                                       className="h-7 gap-1 text-sm"
-                                      onClick={() => deleteInvoice(challan._id)}
+                                      onClick={() => deleteInvoice(data._id)}
                                     >
                                       <Trash className="h-3.5 w-3.5" />
                                       <span className="not-sr-only">
@@ -194,7 +210,7 @@ const Search = () => {
                                     </Button>
                                   </DropdownMenuItem>
                                   <DropdownMenuItem>
-                                    <Link href={"/delivery/" + challan._id}>
+                                    <Link href={"/delivery/" + data._id}>
                                       <Button
                                         size="sm"
                                         variant="outline"
@@ -206,19 +222,33 @@ const Search = () => {
                                         </span>
                                       </Button>
                                     </Link>
-                                    {/* The Dropdown button will have a Link /bill */}
-                                    <Link href={"/delivery/" + challan._id}>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-7 gap-1 text-sm"
-                                      >
-                                        <Eye className="h-3.5 w-3.5" />
-                                        <span className="not-sr-only">
-                                          View DC
-                                        </span>
-                                      </Button>
-                                    </Link>
+                                    {data.status === true ? (
+                                      <Link href={"/bill/" + data.BillRef}>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          className="h-7 gap-1 text-sm"
+                                        >
+                                          <Eye className="h-3.5 w-3.5" />
+                                          <span className="not-sr-only">
+                                            View Bill
+                                          </span>
+                                        </Button>
+                                      </Link>
+                                    ) : (
+                                      <Link href={"/create-bill/"}>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          className="h-7 gap-1 text-sm"
+                                        >
+                                          <CirclePlus className="h-3.5 w-3.5" />
+                                          <span className="not-sr-only">
+                                            Create Bill
+                                          </span>
+                                        </Button>
+                                      </Link>
+                                    )}
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>

@@ -39,15 +39,14 @@ export type Delivery = {
 
 export type SearchDelivery = {
   _id: string;
-  DCNo: string;
-  invoiceId: string;
+  SerialNo: string;
+  BillRef: string;
   ClientNo: number;
   ClientEmail: string;
   ClientName: string;
   CompanyName: string;
   CompanyTel: number;
   CompanyAddress: string;
-  InvoiceDate: string;
   PoNumber: string;
   DCDate: string;
   products: {
@@ -57,6 +56,7 @@ export type SearchDelivery = {
     total: number;
   }[];
   grandTotal: number;
+  status: boolean;
 };
 
 export type BillInputs = {
