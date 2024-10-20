@@ -58,7 +58,7 @@ const Page = () => {
     if (result.data.products) {
       const productArray = result.data.products.map((product: any) => ({
         description: product.description,
-        unit: 1,
+        unit: product.unit,
         unitPrice: 0,
         total: 0,
       }));

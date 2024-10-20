@@ -6,7 +6,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,10 @@ const Page = () => {
   const Router = useRouter();
 
   const handleRowAddition = () => {
-    setProducts((prevProducts) => [...prevProducts, { description: "" }]);
+    setProducts((prevProducts) => [
+      ...prevProducts,
+      { description: "", unit: 0 },
+    ]);
   };
 
   const {
@@ -362,7 +365,7 @@ const Page = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Description</TableHead>
-                    <TableHead></TableHead>
+                    <TableHead>Unit</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -378,6 +381,15 @@ const Page = () => {
                               "description",
                               e.target.value
                             )
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          placeholder="unit"
+                          value={product.unit}
+                          onChange={(e) =>
+                            handleInputChange(index, "unit", e.target.value)
                           }
                         />
                       </TableCell>

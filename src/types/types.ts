@@ -37,6 +37,28 @@ export type Delivery = {
   }[];
 };
 
+export type SearchDelivery = {
+  _id: string;
+  DCNo: string;
+  invoiceId: string;
+  ClientNo: number;
+  ClientEmail: string;
+  ClientName: string;
+  CompanyName: string;
+  CompanyTel: number;
+  CompanyAddress: string;
+  InvoiceDate: string;
+  PoNumber: string;
+  DCDate: string;
+  products: {
+    description: string;
+    unit: number;
+    unitPrice: number;
+    total: number;
+  }[];
+  grandTotal: number;
+};
+
 export type BillInputs = {
   SerialNo: number;
 };
@@ -60,7 +82,9 @@ export type DeliveryData = {
   PoNumber: string;
   product: {
     description: string;
+    unit: number;
   };
+
 };
 
 export type DeliveryInputs = {
@@ -86,6 +110,7 @@ export type Company = {
 
 export type DeliveryProducts = {
   description: string;
+  unit: number;
 };
 
 export type UserInputs = {
@@ -98,27 +123,6 @@ export type SearchInput = {
   searchQuery: string;
 };
 
-export type SearchDelivery = {
-  _id: string;
-  DCNo: string;
-  invoiceId: string;
-  ClientNo: number;
-  ClientEmail: string;
-  ClientName: string;
-  CompanyName: string;
-  CompanyTel: number;
-  CompanyAddress: string;
-  InvoiceDate: string;
-  PoNumber: string;
-  DCDate: string;
-  products: {
-    description: string;
-    unit: number;
-    unitPrice: number;
-    total: number;
-  }[];
-  grandTotal: number;
-};
 
 export type User = {
   _id: string;
