@@ -16,20 +16,20 @@ export async function POST(request: NextRequest) {
         // Check if challan is found
         if (!bill) {
             return NextResponse.json({
-                message: "challan not found",
+                message: "Bill not found",
                 status: 404
             });
         }
 
         return NextResponse.json({
-            message: 'Fetched challan successfully',
+            message: 'Fetched Bill successfully',
             data: bill,
             status: 200
         });
     } catch (error) {
-        console.error('Error fetching Challan:', error);
+        console.error('Error fetching Bill:', error);
         return NextResponse.json({
-            message: 'Failed to fetch Challan',
+            message: 'Failed to fetch Bill',
             error: error || 'Unknown error',
             status: 500
         });

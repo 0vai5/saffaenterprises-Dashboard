@@ -11,18 +11,18 @@ export async function POST(request: NextRequest) {
         const bill = await Bill.findByIdAndDelete(id);
         if (!bill) {
             return NextResponse.json({
-                message: "Challan not found",
+                message: "Bill not found",
                 status: 404
             });
         }
         return NextResponse.json({
-            message: "Challan deleted successfully",
+            message: "Bill deleted successfully",
             status: 200
 
         })
     } catch (error) {
         return NextResponse.json({
-            message: "Error deleting Challan",
+            message: "Error deleting Bill",
             status: 500
         });
     }

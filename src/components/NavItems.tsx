@@ -1,75 +1,56 @@
-'use client'
+"use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
-import { LogOut } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const NavItems = () => {
-  const router = useRouter();
-
-  const LogoutHandler = async () => {
-    try {
-      const response = await fetch('/api/users/logout')
-      if (response.ok) {
-        const result = await response.json();
-        toast.success(result.message);
-        router.push('/login')
-      } else {
-        console.error('Logout failed: ', response.statusText)
-      }
-    } catch (error) {
-      console.error('Error during logout: ', error)
-    }
-  }
-  
-
   return (
     <>
-    <ul className="flex flex-col md:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
-      <li>
-        <Link href="/">
-          <h4 className="text-xl font-semibold">Dashboard</h4>
-        </Link>
-      </li>
-      <li>
-        <Link href="/create-bill">
-          <h4 className="text-xl font-semibold">Create Bill</h4>
-        </Link>
-      </li>
-      <li>
-        <Link href="/create-delivery">
-          <h4 className="text-xl font-semibold">Create Delivery</h4>
-        </Link>
-      </li>
-      <li>
-        <Link href="/search">
-          <h4 className="text-xl font-semibold">Search</h4>
-        </Link>
-      </li>
-      <li>
-        <Link href="/users">
-          <h4 className="text-xl font-semibold">Users</h4>
-        </Link>
-      </li>
-      <li>
-        <Button
-          size="sm"
-          variant="outline"
-          className="h-7 gap-1 text-sm"
-          onClick={LogoutHandler}
-        >
-          <LogOut className="h-3.5 w-3.5" />
-          <span className="not-sr-only">LogOut</span>
-        </Button>
-      </li>
-    </ul>
-    <Toaster
-    position="top-right"
-    reverseOrder={false}
-  />
-  </>
+      <ul className="flex sm:flex-col md:flex-col lg:flex-row gap-10 justify-between items-start md:items-center mt-10 md:mt-0">
+        <li>
+          <Link href="/">
+            <h4 className="text-xl font-semibold">Dashboard</h4>
+          </Link>
+        </li>
+        <NavigationMenu>
+          <NavigationMenuList className="bg-transparent">
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="text-xl font-semibold">
+                Create
+              </NavigationMenuTrigger>
+              <NavigationMenuContent className="p-5 text-lg">
+                <NavigationMenuLink href="/create-delivery">
+                  CreateDelivery
+                </NavigationMenuLink>
+                <br />
+                <NavigationMenuLink href="/create-bill" className="mb-10">
+                  CreateBill
+                </NavigationMenuLink>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        <li>
+          <Link href="/search">
+            <h4 className="text-xl font-semibold">Search</h4>
+          </Link>
+        </li>
+        <li>
+          <Link href="/users">
+            <h4 className="text-xl font-semibold">Users</h4>
+          </Link>
+        </li>
+      </ul>
+      <Toaster position="top-right" reverseOrder={false} />
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -20,21 +20,32 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-
 const DashboardCards = () => {
   return (
-    <div className="flex justify-evenly items-center gap-5 md:flex-row flex-col w-full mb-10">
-      <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
+    <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-3">
+      <Card className="dark:bg-transparent dark:border-[#27272A]" x-chunk="dashboard-05-chunk-0">
         <CardHeader className="pb-3">
-          <CardTitle>New Challan</CardTitle>
+          <CardTitle>New Delivery</CardTitle>
           <CardDescription className="max-w-lg text-balance leading-relaxed">
-            Introducing Our Dynamic Orders Dashboard for Seamless Management and
-            Insightful Analysis.
+          Create a new delivery challan to document your shipments and provide clear records for customers. Ensure smooth communication and keep track of deliveries with ease.
           </CardDescription>
         </CardHeader>
         <CardFooter>
           <Link href="/create-delivery">
-            <Button>Create New Challan</Button>
+            <Button>Create New Delivery</Button>
+          </Link>
+        </CardFooter>
+      </Card>
+      <Card className="dark:bg-transparent dark:border-[#27272A]" x-chunk="dashboard-05-chunk-0">
+        <CardHeader className="pb-3">
+          <CardTitle>New Bill</CardTitle>
+          <CardDescription className="max-w-lg text-balance leading-relaxed">
+          Generate a new bill for your customers to accurately record transactions and payments. Keep your invoicing process simple and organized for easy tracking and management
+          </CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Link href="/create-bill">
+            <Button>Create New Bill</Button>
           </Link>
         </CardFooter>
       </Card>
