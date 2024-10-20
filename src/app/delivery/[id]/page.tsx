@@ -60,9 +60,17 @@ const Page = ({ params }: any) => {
   return (
     <>
       <div className="px-4 py-4">
-        <Link href="/">
+        <Link href="/" className="dark:hidden">
           <Image
             src={"/saffaenterprises.png"}
+            alt="Company Logo"
+            width={150}
+            height={150}
+          />
+        </Link>
+        <Link href="/" className="hidden dark:flex">
+          <Image
+            src={"/saffaenterprises-dark.png"}
             alt="Company Logo"
             width={150}
             height={150}
@@ -98,6 +106,14 @@ const Page = ({ params }: any) => {
                 alt="company logo"
                 width={150}
                 height={75}
+                className="dark:hidden"
+              />
+              <Image
+                src={"/saffaenterprises-dark.png"}
+                alt="company logo"
+                width={150}
+                height={75}
+                className="hidden dark:flex"
               />
               <div className="">
                 <ul className="list-none flex justify-evenly flex-col ">
@@ -125,7 +141,8 @@ const Page = ({ params }: any) => {
                 <u>Delivery Challan</u>
               </h1>
               <CardTitle className="mb-3">
-                delivery# <span className="font-light">{delivery.DCNo}</span>
+                delivery#{" "}
+                <span className="font-light">0{delivery.SerialNo}</span>
               </CardTitle>
               <div className="flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0">
                 <div className="flex flex-col">
@@ -143,10 +160,6 @@ const Page = ({ params }: any) => {
                   <p>
                     <span className="font-semibold">P.O. No#: </span>{" "}
                     {delivery.PoNumber}
-                  </p>
-                  <p>
-                    <span className="font-semibold">InvoiceDate:</span>{" "}
-                    {delivery.InvoiceDate}
                   </p>
                   <p>
                     <span className="font-semibold">DCDate:</span>{" "}
@@ -167,7 +180,7 @@ const Page = ({ params }: any) => {
                       {delivery.products.map((product, index) => (
                         <TableRow key={index} className="bg-accent">
                           <TableCell>
-                            <div className="font-medium">
+                            <div className="font-lg">
                               {product.description}
                             </div>
                           </TableCell>

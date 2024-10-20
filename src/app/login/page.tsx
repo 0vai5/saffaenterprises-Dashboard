@@ -43,7 +43,7 @@ const Page = () => {
 
       const result = await response.json();
 
-      router.refresh();
+      router.push('/');
       toast.success(result.message);
     } catch (error: any) {
       console.log("Error in Logging in: ", error);

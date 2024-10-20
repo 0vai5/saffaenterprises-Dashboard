@@ -24,7 +24,6 @@ import ReactToPrint from "react-to-print";
 import Link from "next/link";
 import { Bill } from "@/types/types";
 
-
 const Page = ({ params }: any) => {
   const [bill, setBill] = useState<Bill | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
@@ -63,9 +62,17 @@ const Page = ({ params }: any) => {
         <Link href="/">
           <Image
             src={"/saffaenterprises.png"}
-            alt="Company Logo"
+            alt="company logo"
             width={150}
-            height={150}
+            height={75}
+            className="dark:hidden"
+          />
+          <Image
+            src={"/saffaenterprises-dark.png"}
+            alt="company logo"
+            width={150}
+            height={75}
+            className="hidden dark:flex"
           />
         </Link>
       </div>
@@ -98,6 +105,14 @@ const Page = ({ params }: any) => {
                 alt="company logo"
                 width={150}
                 height={75}
+                className="dark:hidden"
+              />
+              <Image
+                src={"/saffaenterprises-dark.png"}
+                alt="company logo"
+                width={150}
+                height={75}
+                className="hidden dark:flex"
               />
               <div className="">
                 <ul className="list-none flex justify-evenly flex-col ">
@@ -122,7 +137,7 @@ const Page = ({ params }: any) => {
             </CardHeader>
             <CardContent className="mb-2 container">
               <CardTitle className="mb-3">
-                Invoice# <span className="font-light">{bill.invoiceID}</span>
+                Invoice# <span className="font-light">0{bill.SerialNo}</span>
               </CardTitle>
               <div className="flex justify-between item-center mb-10 sm:flex-row flex-col gap-3 md:gap-0">
                 <div className="flex flex-col">
@@ -142,14 +157,7 @@ const Page = ({ params }: any) => {
                     {bill.PoNumber}
                   </p>
                   <p>
-                    <span className="font-semibold">InvoiceDate:</span>{" "}
-                    {bill.InvoiceDate}
-                  </p>
-                  <p>
                     <span className="font-semibold">DCDate:</span> {bill.DCDate}
-                  </p>
-                  <p>
-                    <span className="font-semibold">DCNo:</span> {bill.DCNo}
                   </p>
                 </div>
               </div>
@@ -159,14 +167,16 @@ const Page = ({ params }: any) => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Description</TableHead>
-                        <TableHead className="hidden sm:table-cell">
+                        <TableHead className="font-bold">Description</TableHead>
+                        <TableHead className="hidden sm:table-cell font-bold">
                           Unit
                         </TableHead>
-                        <TableHead className="hidden sm:table-cell">
+                        <TableHead className="hidden sm:table-cell font-bold">
                           Unit Price
                         </TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
+                        <TableHead className="text-right font-bold">
+                          Amount
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

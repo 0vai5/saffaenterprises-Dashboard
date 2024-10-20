@@ -1,6 +1,5 @@
 export type Bill = {
-  invoiceID: string;
-  DCNo: string;
+  SerialNo: number;
   _id: string;
   ClientNo: number;
   ClientEmail: string;
@@ -8,7 +7,6 @@ export type Bill = {
   CompanyName: string;
   CompanyTel: number;
   CompanyAddress: string;
-  InvoiceDate: string;
   PoNumber: string;
   DCDate: string;
   products: {
@@ -21,7 +19,7 @@ export type Bill = {
 };
 
 export type Delivery = {
-  DCNo: string;
+  SerialNo: number;
   _id: string;
   ClientNo: number;
   ClientEmail: string;
@@ -35,6 +33,8 @@ export type Delivery = {
   products: {
     description: string;
   }[];
+  status: boolean;
+  
 };
 
 export type SearchDelivery = {

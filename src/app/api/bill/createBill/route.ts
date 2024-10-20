@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     // Return the created invoice
     return NextResponse.json({
-      message: "Challan created successfully",
+      message: "Bill created successfully",
       bill: newBill,
     });
   } catch (error) {
