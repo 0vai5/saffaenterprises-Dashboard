@@ -7,6 +7,7 @@ export interface Company extends Document {
     ClientNo: number;
     ClientEmail: string;
     ClientName: string;
+    CreatedAt: Date;
 }
 
 const companySchema: Schema<Company> = new Schema({
@@ -15,7 +16,8 @@ const companySchema: Schema<Company> = new Schema({
     CompanyAddress: { type: String, required: true },
     ClientNo: { type: Number },
     ClientEmail: { type: String },
-    ClientName: { type: String }
+    ClientName: { type: String },
+    CreatedAt: { type: Date, default: Date.now }
 })
 
 const CompanyModel = (mongoose.models.Company as mongoose.Model<Company>) || mongoose.model<Company>("Company", companySchema)

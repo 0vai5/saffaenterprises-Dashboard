@@ -19,6 +19,7 @@ export interface Delivery extends Document {
   BillRef: mongoose.Schema.Types.ObjectId;
   status: boolean;
   grandTotal: number;
+  CreatedAt: Date;
 }
 
 const DeliverySchema: Schema<Delivery> = new Schema({
@@ -42,6 +43,7 @@ const DeliverySchema: Schema<Delivery> = new Schema({
   BillRef: { type: mongoose.Schema.Types.ObjectId, ref: "Bill" },
   status: { type: Boolean, default: false },
   grandTotal: { type: Number },
+  CreatedAt: { type: Date, default: Date.now },
 });
 
 const DeliveryModel =

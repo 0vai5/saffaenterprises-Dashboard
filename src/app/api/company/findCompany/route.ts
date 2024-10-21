@@ -16,9 +16,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Search for the company using companyName
-    const company = await Company.findOne({CompanyName});
-    console.log("Company Found: ", company);
+    // Create a regex for partial matching (case-insensitive)
+    const regex = new RegExp(`.*${CompanyName}.*`, "i");
+
+    // Search for the company using partial match regex
+    const company = await Company.findOne({ CompanyName: regex });
+    console.log("Companies Found: ", company);
 
     if (!company) {
       return NextResponse.json({

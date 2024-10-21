@@ -18,6 +18,7 @@ export interface Bill extends Document {
   }>;
   grandTotal: number;
   DeliveryRef?: mongoose.Schema.Types.ObjectId;
+  CrratedAt: Date;
 }
 
 const BillSchema: Schema<Bill> = new Schema({
@@ -40,6 +41,7 @@ const BillSchema: Schema<Bill> = new Schema({
   ],
   grandTotal: { type: Number, required: true },
   DeliveryRef: { type: mongoose.Schema.Types.ObjectId, ref: "Delivery" },
+  CrratedAt: { type: Date, default: Date.now },
 });
 
 const BillModel =
