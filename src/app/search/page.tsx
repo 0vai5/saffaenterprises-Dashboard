@@ -118,9 +118,7 @@ const Search = () => {
   return (
     <>
       <Header />
-      {loading === true ? (
-        <Loader />
-      ) : (
+      {loading && <Loader />}
         <section className="max-container">
           <Toaster position="top-right" reverseOrder={false} />
           <Card className="mb-4 dark:bg-transparent dark:border-[#27272A]">
@@ -280,7 +278,6 @@ const Search = () => {
             </Card>
           </div>
         </section>
-      )}
     </>
   );
 };

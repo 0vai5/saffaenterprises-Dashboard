@@ -26,7 +26,7 @@ import { Bill } from "@/types/types";
 import Loader from "@/components/Loader";
 
 const Page = ({ params }: any) => {
-  const [bill, setBill] = useState<Bill | null>(null);
+  const [bill, setBill] = useState<Bill | null>();
   const [loading, setLoading] = useState(false);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,7 +56,7 @@ const Page = ({ params }: any) => {
     fetchBillById();
   }, [params.id]);
 
-  if (!bill || loading) {
+  if (loading || !bill) {
     return <Loader />;
   }
 

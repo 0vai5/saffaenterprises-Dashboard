@@ -196,10 +196,8 @@ const Page = () => {
     <>
       <Header />
       <Toaster position="top-right" reverseOrder={false} />
-      {loading === true ? (
-        <Loader />
-      ) : (
-        <section className="max-container">
+      {loading && <Loader />}
+      <section className="max-container">
         <form
           className="flex flex-col justify-between gap-4"
           onSubmit={handleSubmit(onSubmit)}
@@ -426,7 +424,6 @@ const Page = () => {
           </Button>
         </form>
       </section>
-      )}
     </>
   );
 };

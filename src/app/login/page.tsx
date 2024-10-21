@@ -80,10 +80,8 @@ const Page = () => {
         </Link>
       </div>
       <Toaster position="top-right" reverseOrder={false} />
-      {loading === true ? (
-        <Loader />
-      ) : (
-        <section className="container flex justify-center items-center">
+      {loading && <Loader />}
+      <section className="container flex justify-center items-center">
         <Card className="w-full max-w-sm dark:bg-transparent dark:border-[#27272A]">
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
@@ -133,7 +131,6 @@ const Page = () => {
           </form>
         </Card>
       </section>
-      )}
     </>
   );
 };

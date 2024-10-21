@@ -47,18 +47,18 @@ const Page = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ SerialNo }),
       });
-  
+
       const result = await response.json();
-  
+
       if (!response.ok) {
         toast.error(result.message);
         return;
       }
-  
+
       console.log("Fetched delivery data:", result.data);
-  
+
       setDeliveryData(result.data);
-  
+
       if (result.data.products) {
         const productArray = result.data.products.map((product: any) => ({
           description: product.description,
@@ -66,7 +66,7 @@ const Page = () => {
           unitPrice: 0,
           total: 0,
         }));
-  
+
         setProducts(productArray);
       }
       setLoading(false);
@@ -75,7 +75,7 @@ const Page = () => {
       toast.error("There was an Error While Fetching Delivery");
       setLoading(false);
     }
-   
+
   };
 
 
@@ -104,7 +104,7 @@ const Page = () => {
       products,
       grandTotal,
       CompanyName: deliveryInfo?.CompanyName,
-      CompanyAddress: deliveryInfo?.CompanyAddress, 
+      CompanyAddress: deliveryInfo?.CompanyAddress,
       CompanyTel: deliveryInfo?.CompanyTel,
       ClientEmail: deliveryInfo?.ClientEmail,
       ClientName: deliveryInfo?.ClientName,
@@ -134,7 +134,7 @@ const Page = () => {
       reset();
       setProducts([]);
     } catch (error: any) {
-      toast.error(error.message); 
+      toast.error(error.message);
       setLoading(false);
     }
   };
@@ -161,10 +161,8 @@ const Page = () => {
     <>
       <Header />
       <Toaster position="top-right" reverseOrder={false} />
-      {loading === true ? (
-        <Loader />
-      ) : (
-        <section className="max-container">
+      {loading && <Loader />}
+      <section className="max-container">
         <form
           className="flex flex-col justify-between gap-4"
           onSubmit={handleSubmit(onSubmit)}
@@ -287,7 +285,6 @@ const Page = () => {
           </Button>
         </form>
       </section>
-      )}
     </>
   );
 };

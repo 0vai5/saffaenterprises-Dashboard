@@ -105,9 +105,7 @@ const Page = () => {
   return (
     <>
       <Header />
-      {loading === true ? (
-        <Loader />
-      ) : (
+      {loading && <Loader />}
         <section className="max-container gap-5">
         <Toaster position="top-right" reverseOrder={false} />
         <Card className="px-4 py-4 mb-5 dark:bg-transparent dark:border-[#27272A]">
@@ -190,7 +188,6 @@ const Page = () => {
           </form>
         </Card>
       </section>
-      )}
     </>
   );
 };
