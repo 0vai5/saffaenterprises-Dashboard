@@ -207,7 +207,7 @@ const Page = ({ params }: any) => {
                 </CardContent>
               </Card>
             </CardContent>
-            <CardFooter className="flex justify-between items-end md:items-center px-5 sm:flex-row flex-col-reverse  gap-[4rem]">
+            <CardFooter className="flex justify-between items-end md:items-center px-6 sm:flex-row flex-col-reverse  gap-[4rem]">
               <div className="flex justify-end items-end flex-col gap-2">
                 <Separator className="font-bold" />
                 <p className="font-semibold">Waseem Haroon</p>
