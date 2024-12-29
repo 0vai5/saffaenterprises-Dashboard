@@ -28,11 +28,12 @@ const Page = () => {
     reset,
   } = useForm<UserInputs>();
 
+  const revalidate = 3600;
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const response = await fetch("/api/users/findUsers", {
-        cache: "no-store",
+        cache: "no-cache",
       });
       const result = await response.json();
       if (!response.ok) {
@@ -106,7 +107,7 @@ const Page = () => {
     <>
       <Header />
       {loading && <Loader />}
-        <section className="max-container gap-5">
+      <section className="max-container gap-5">
         <Toaster position="top-right" reverseOrder={false} />
         <Card className="px-4 py-4 mb-5 dark:bg-transparent dark:border-[#27272A]">
           <CardTitle>Active Users</CardTitle>

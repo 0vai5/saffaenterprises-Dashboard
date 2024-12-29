@@ -29,7 +29,7 @@ export default function RootLayout({
       </head>
       <Analytics />
       <SpeedInsights />
-      <body className={`${lato.className} dark:bg-[#09090B]`}>
+      <body className={`${lato.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
